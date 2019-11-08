@@ -7,9 +7,10 @@
     }
  */
 
-const express = require('express');
-const router = express.Router();
+const express  = require('express');
+const router   = express.Router();
 const mongoose = require('mongoose');
+const bcrypt   = require('bcrypt'); // enkripsi password
 
 // model database
 const Customer = require('../../model/customer/modelcustomer');
@@ -40,7 +41,7 @@ router.get('/',(req,res,next)=>{
     },{ $unwind:"$user_region"},
     {
       $project:{
-        password:0,__v:0
+        password:0
       }
     }
   ])
@@ -132,36 +133,44 @@ router.get('/data/:id',(req,res,next)=>{
 
 // Customer Register
 router.post('/',(req,res,next)=>{
-  const customerRegister = new Customer({
-      _id: new mongoose.Types.ObjectId(),
-      username:req.body.username,
-      password:req.body.password,
-      email: req.body.email,
-      dateCreated:req.body.dateCreated,
-      updateCreated:req.body.updateCreated
-    });
+  Customer.find({username:req.body.username}).exec()
+  .then(result =>{
+    /*
+    * Validasi data jika ada username yang sama maka user tidak dapat diregister
+    */
 
-  customerRegister
-  .save()
-  .then(result => {
-    console.log(result);
+    if(result.length >= 1){
+      return res.status(409).json({message:"Username exists",status:"0"});
+    }else{
+      //enkripsi password 
+      bcrypt.hash(req.body.password,10,(err,hash)=>{
+        
+        if(err){
+          return res.status(500).json({status:0,message:err});
+        }else{
+          const customerRegister = new Customer({
+            _id: new mongoose.Types.ObjectId(),
+            username:req.body.username,
+            email: req.body.email,
+            password:hash,
+            dateCreated:req.body.dateCreated,
+            updateCreated:req.body.updateCreated
+          });
 
-    res.status(201).json({
-      message:"Successfully Registered User",
-      succes:"1",
-      customerData:result
-    });
+          customerRegister.save()
+          .then(result =>{
+            console.log(result);
+            res.status(201).json({message:"Successfully Registered User",succes:"1",customerData:result});
+          })
+          .catch(error =>{
+            console.log(error);
+            res.status(500).json({message:"Failed Register Customer",status:"0",error: error });
+          });
+        }
 
-  })
-  .catch(err =>{
-    console.log(err);
+      });
 
-    res.status(500).json({ 
-      message:"Failed Register Customer",
-      status:"0",
-      error: err 
-    });
-
+    }
   });
 
 });
@@ -209,28 +218,16 @@ router.post('/region',(req,res,next)=>{
     console.log(result);
 
     if(result){
-      res.status(201).json({
-          message:"Successfully Insert User Region",
-          success:"1",
-          customerData:result
-      });
+      res.status(201).json({message:"Successfully Insert User Region",success:"1",customerData:result});
     }else{
-      res.status(404).json({
-          message:"Failed Insert User Region",
-          succes:"0",
-          customerData:[]
-      });
+      res.status(404).json({message:"Failed Insert User Region",succes:"0",customerData:[]});
     }
 
   })
   .catch(error =>{
     console.log(error);
-
-    res.status(500).json({
-      message:"Upss! Sorry",
-      succes:"0"
-    });
-
+    
+    res.status(500).json({message:"Upss! Sorry",succes:"0"});
   });
 
 });
