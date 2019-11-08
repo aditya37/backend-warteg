@@ -37,7 +37,12 @@ router.get('/',(req,res,next)=>{
           foreignField:"customer",
           as:"user_region"
       }
-    },{ $unwind:"$user_region"}
+    },{ $unwind:"$user_region"},
+    {
+      $project:{
+        password:0,__v:0
+      }
+    }
   ])
   .then(result =>{
 
@@ -93,7 +98,7 @@ router.get('/data/:id',(req,res,next)=>{
     },{ $unwind:"$user_region"},
     {
       "$match": { "_id": mongoose.Types.ObjectId(id) }
-    }
+    },{$project:{ __v:0,password:0 } }
   ])
 
   .then(result =>{
