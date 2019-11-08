@@ -139,7 +139,7 @@ router.post('/',(req,res,next)=>{
       email: req.body.email,
       dateCreated:req.body.dateCreated,
       updateCreated:req.body.updateCreated
-  });
+    });
 
   customerRegister
   .save()

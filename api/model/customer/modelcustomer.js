@@ -10,7 +10,7 @@ const customerSchema = mongoose.Schema({
   email: String,
   dateCreated: Date,
   updateCreated: Date
-});
+},{versionKey: false});  // menghilangkan field __v 
 
 /*
 mongoose.model('Nama_document/tabel',nama_schema)

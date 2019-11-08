@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 */
 
 const customerRegion = mongoose.Schema({
-   
+    
     _id : mongoose.Types.ObjectId,
     administrative_area_level_1: String,
     administrative_area_level_2: String,
@@ -18,6 +18,6 @@ const customerRegion = mongoose.Schema({
         ref:"customer",
     }
 
-});
+},{versionKey: false});
 
 module.exports = mongoose.model("customerregion",customerRegion);

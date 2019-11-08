@@ -5,7 +5,7 @@ Customer data
 */
  
 const customerData = mongoose.Schema({
-   
+    
     _id: mongoose.Schema.Types.ObjectId,
     firstName: String,
     lastName: String,
@@ -15,8 +15,7 @@ const customerData = mongoose.Schema({
     customer:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer'
-    }
-    
-});
+    }   
+},{versionKey: false});
 
 module.exports = mongoose.model('customerData',customerData);
