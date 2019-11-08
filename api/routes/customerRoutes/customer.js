@@ -157,7 +157,7 @@ router.post('/',(req,res,next)=>{
     console.log(err);
 
     res.status(500).json({ 
-      message:"Failed Registered Customer",
+      message:"Failed Register Customer",
       status:"0",
       error: err 
     });

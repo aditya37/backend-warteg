@@ -61,8 +61,8 @@ app.use('/products',productRoutes);
 app.use('/customers',customerRoutes);
 
 // Declare Authentication route
-app.use('/auth/customer/login',authCustomer);
-app.use('/auth/vendor/login',authVendor);
+app.use('/auth/customer/',authCustomer);
+app.use('/auth/vendor/',authVendor);
 
 // error handling
 app.use((req,res,next )=> {
