@@ -48,29 +48,15 @@ router.get('/',(req,res,next)=>{
   .then(result =>{
 
     if(result){
-      res.status(200).json({
-          message:"Successfully Load Data",
-          status:"1",
-          count: result.length,
-          customer_datas:result
-      });
+      res.status(200).json({message:"Successfully Load Data",status:"1",count: result.length,customer_datas:result});
     }else{
-      res.status(404).json({
-          message:"Customer Datas Not Found",
-          status:"0",
-          dataCustomer:[]
-      });
+      res.status(404).json({message:"Customer Datas Not Found",status:"0",dataCustomer:[]});
     }
 
   })
   .catch(error => {
     console.log(error);
-
-    res.status(500).json({
-      message:"Upsss! Sorry",
-      status:"0"
-    });
-
+    res.status(500).json({message:"Upsss! Sorry",status:"0"});
   });
 
 });
@@ -105,28 +91,15 @@ router.get('/data/:id',(req,res,next)=>{
   .then(result =>{
 
     if(result){
-      res.status(200).json({
-        message:"Successfully Load Data",
-        status:"1",
-        dataCustomer:result
-      });
+      res.status(200).json({message:"Successfully Load Data",status:"1",dataCustomer:result});
     }else{
-      res.status(404).json({
-        message:"Customer ID Not Found",
-        status:"0",
-        dataCustomer:[]
-      });
+      res.status(404).json({message:"Customer ID Not Found",status:"0",dataCustomer:[]});
     }
     
   })
   .catch(error => {
     console.log(error);
-
-    res.status(500).json({
-      message:"Upsss! Sorry",
-      status:"0"
-    });
-
+    res.status(500).json({message:"Upsss! Sorry",status:"0"});
   });
 
 });
@@ -226,10 +199,21 @@ router.post('/region',(req,res,next)=>{
   })
   .catch(error =>{
     console.log(error);
-    
+
     res.status(500).json({message:"Upss! Sorry",succes:"0"});
   });
 
 });
 
+router.delete('/:idCustomer',(req,res,next)=>{
+  Customer.deleteOne({idCustomer: req.body.idCustomer})
+  .exec()
+  .then(result =>{
+    res.status(200).json({status:"1",message:"Customer Deleted"});
+  })
+  .catch(error =>{
+    console.log(error)
+    res.status(500).json({status:"0",message:"Sorry!!"});
+  })
+});
 module.exports = router;

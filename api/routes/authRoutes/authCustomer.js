@@ -1,12 +1,34 @@
 const express = require('express');
-const router = express.Router();
+const router  = express.Router();
+const bycrpt  = require('bcrypt');
+
+const Customer = require('../../model/customer/modelcustomer');
 
 
-// Get All Customer datas
 router.post('/',(req,res,next)=>{
-    res.status(200).json({
-        message: "Ini Halaman Auth Login customer"
-    });
-  });
+  
+  Customer.find({username: req.body.username}).exec()
+  .then(customer =>{
+    
+    if(customer.length <1){
+      return res.status(401).json({message:"gagal"});
+    }
+    
+    bycrpt.compare(req.body.password,customer[0].password,(err,result)=>{
+      if(err){
+        return res.status(401).json({message:"Auth Failed"})
+      }
+
+      if(result){
+        return res.status(200).json({message:"oke"})
+      }else{
+        return res.status(401).json({message:"Auth failed"})
+      }
+      
+    })    
+
+  })
+
+});
   
 module.exports = router;
