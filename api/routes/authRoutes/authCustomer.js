@@ -20,11 +20,11 @@ router.post('/',(req,res,next)=>{
       }
 
       if(result){
-        return res.status(200).json({message:"oke"})
+        return res.status(200).json({message:"oke",customerData:customer})
       }else{
         return res.status(401).json({message:"Auth failed"})
       }
-      
+
     })    
 
   })

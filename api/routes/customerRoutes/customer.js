@@ -205,6 +205,7 @@ router.post('/region',(req,res,next)=>{
 
 });
 
+//delete customer byID
 router.delete('/:idCustomer',(req,res,next)=>{
   Customer.deleteOne({idCustomer: req.body.idCustomer})
   .exec()
