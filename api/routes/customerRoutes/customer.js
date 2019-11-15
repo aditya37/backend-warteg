@@ -13,14 +13,23 @@ const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt'); // enkripsi password
 
 // model database
-const Customer = require('../../model/customer/modelcustomer');
-const dataCustomer = require('../../model/customer/ModelcustomerData');
-const CustomerRegion = require('../../model/customer/modelCustomerRegion');
+const Customer        = require('../../model/customer/modelcustomer');
+const dataCustomer    = require('../../model/customer/ModelcustomerData');
+const CustomerRegion  = require('../../model/customer/modelCustomerRegion');
+const CustomerLocation= require('../../model/customer/customerLocation');
 
 // Get All Customer datas
 /*
 * link dokumentasi => https://stackoverflow.com/questions/35813854/how-to-join-multiple-collections-with-lookup-in-mongodb
  */
+
+/*
+ * ====================================
+ *  Read Datas Area
+ * ====================================
+ */
+
+ // get all customer datas
 router.get('/',(req,res,next)=>{
   Customer.aggregate([
     {
@@ -39,6 +48,14 @@ router.get('/',(req,res,next)=>{
           as:"user_region"
       }
     },{ $unwind:"$user_region"},
+    {
+      $lookup:{
+        from:"customerlocations",
+        localField:"_id",
+        foreignField:"customer",
+        as:"user_location"
+    }
+    },{$unwind:"$user_location"},
     {
       $project:{
         password:0
@@ -84,6 +101,14 @@ router.get('/data/:id',(req,res,next)=>{
       }
     },{ $unwind:"$user_region"},
     {
+      $lookup:{
+        from:"customerlocations",
+        localField:"_id",
+        foreignField:"customer",
+        as:"user_location"
+    }
+    },{ $unwind:"$user_location"},
+    {
       "$match": { "_id": mongoose.Types.ObjectId(id) }
     },{$project:{ __v:0,password:0 } }
   ])
@@ -104,14 +129,21 @@ router.get('/data/:id',(req,res,next)=>{
 
 });
 
-// Customer Register
+/*
+ * ====================================
+ *  Create Datas Area
+ * ====================================
+ */
+
+// Add Customer Register
+
 router.post('/',(req,res,next)=>{
   Customer.find({username:req.body.username}).exec()
   .then(result =>{
     /*
     * Validasi data jika ada username yang sama maka user tidak dapat diregister
     */
-
+   
     if(result.length >= 1){
       return res.status(409).json({message:"Username exists",status:"0"});
     }else{
@@ -148,7 +180,7 @@ router.post('/',(req,res,next)=>{
 
 });
 
-// Customer Data
+// Add Customer Data
 router.post('/data',(req,res,next)=>{
   const customerData = new dataCustomer({
     _id: new mongoose.Types.ObjectId,
@@ -172,7 +204,7 @@ router.post('/data',(req,res,next)=>{
   });
 });
 
-// Customer Region
+// Add Customer Region
 router.post('/region',(req,res,next)=>{
   const region = new CustomerRegion({
     _id : new mongoose.Types.ObjectId,
@@ -205,6 +237,34 @@ router.post('/region',(req,res,next)=>{
 
 });
 
+// Add Customer coordinat
+router.post('/coordinat',(req,res,next)=>{
+  const coordinatCustomer = new CustomerLocation({
+    lat: req.body.lat,
+    lng: req.body.lng,
+    customer: req.body.idCustomer
+  });
+  coordinatCustomer.save()
+  .then(result =>{
+    if(result){
+      res.status(201).json({message:"Successfully Insert Location Coordinat",success:"1"});
+    }else{
+      res.status(404).json({message:"Failed Insert Location Coordinat",succes:"0"});
+    }
+  })
+  .catch(error =>{
+    console.log(error);
+    res.status(500).json({message:"Upss! Sorry",succes:"0"});
+  });
+
+});
+
+/*
+ * ====================================
+ *  Update and Delete Datas Area
+ * ====================================
+ */
+
 //delete customer byID
 router.delete('/:idCustomer',(req,res,next)=>{
   Customer.deleteOne({idCustomer: req.body.idCustomer})
@@ -217,4 +277,22 @@ router.delete('/:idCustomer',(req,res,next)=>{
     res.status(500).json({status:"0",message:"Sorry!!"});
   })
 });
+
+router.patch('/coordinat',(req,res,next)=>{
+  CustomerLocation.updateMany(
+    {
+      customer:req.body.idCustomer
+    },
+    {
+      $set:{lat:req.body.lat,lng:req.body.lng}
+    })
+  .exec()
+  .then(result =>{
+    res.status(200).json({message:"Your Location",succes:"1"});
+  })
+  .catch(error =>{
+    res.status(500).json({message:"Sorry Please turn your gps",succes:"0"});
+  });
+});
+
 module.exports = router;

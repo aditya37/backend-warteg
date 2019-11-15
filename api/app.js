@@ -18,6 +18,7 @@ const authVendor     = require('./routes/authRoutes/authVendor');
 // import file routes
 const productRoutes  = require('./routes/productRoutes/product');
 const customerRoutes = require('./routes/customerRoutes/customer');
+const vendoRoutes    = require('./routes/vendorRoutes/vendor')
 
 // koneksi ke db
 mongoose.connect(
@@ -58,6 +59,7 @@ app.use((req,res,next)=>{
 
 // declare route
 app.use('/products',productRoutes);
+app.use('/vendors',vendoRoutes);
 app.use('/customers',customerRoutes);
 
 // Declare Authentication route
