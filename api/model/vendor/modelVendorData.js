@@ -1,7 +1,7 @@
-const moongose = require('mongoose');
+const mongoose = require('mongoose');
 
-const schemaVendorData = moongose.Schema({
-    _id:moongose.Schema.Types.ObjectId,
+const schemaVendorData = mongoose.Schema({
+    _id:mongoose.Schema.Types.ObjectId,
     firstName:String,
     lastName:String,
     birth:Date,
@@ -9,7 +9,7 @@ const schemaVendorData = moongose.Schema({
     photo:String,
     vendor:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"vendor"
+        ref: 'vendor'
     }
 },{versionKey:false});
 

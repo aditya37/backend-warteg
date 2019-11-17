@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const vendorSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+    _id: mongoose.Types.ObjectId,
     username:String,
     password:String,
     email:String,
