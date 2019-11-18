@@ -145,7 +145,7 @@ router.post('/',(req,res,next)=>{
     */
    
     if(result.length >= 1){
-      return res.status(409).json({message:"Username exists",status:"0"});
+      return res.status(409).json({message:"Username exists",success:"0"});
     }else{
       //enkripsi password 
       bcrypt.hash(req.body.password,10,(err,hash)=>{
