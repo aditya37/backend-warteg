@@ -6,7 +6,7 @@ const vendorSchema = mongoose.Schema({
     password:String,
     email:String,
     dateCreated:Date,
-    dateUpdate:Date
+    dateUpdated:Date
 },{versionKey:false});
 
 module.exports = mongoose.model("vendor",vendorSchema);
