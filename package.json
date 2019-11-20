@@ -1,7 +1,11 @@
 {
-  "name": "restapi-sembako",
+  "name": "restapi-waroenk",
   "version": "1.0.0",
-  "description": "restapi app-sembako",
+  "description": "restapi app-waroenk",
+  "apidoc":{
+    "title": "Waroenk API documentation",
+    "url":"http://localhost:3000/"
+  },
   "main": "app.js",
   "dependencies": {
     "bcrypt": "^3.0.6",

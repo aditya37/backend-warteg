@@ -1,0 +1,9 @@
+{
+    "name": "Waroenk API documentation",
+    "version": "1.0.0",
+    "description": "RestAPI Android Apps Waroenk",
+    "url":"http://localhost:3000/",
+    "template": {
+        "forceLanguage": "en"
+    }
+}
