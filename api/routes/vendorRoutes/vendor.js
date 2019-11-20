@@ -53,7 +53,49 @@ router.get('/',(req,res,next)=>{
     })
 });
 
-router.get('/data/:id',(req,res,next)=>{});
+router.get('/data/:id',(req,res,next)=>{
+    const id = req.params.id;
+    Vendor.aggregate([
+        {
+            $lookup:{
+                from:"vendordatas",
+                localField:"_id",
+                foreignField:"vendor",
+                as:"vendor_datas"
+            }
+        },{ $unwind:"$vendor_datas"},
+        {
+            $lookup:{
+                from:"vendorregions",
+                localField:"_id",
+                foreignField:"vendor",
+                as:"vendor_regions"
+            }
+        },{$unwind:"$vendor_regions"},
+        {
+            $lookup:{
+                from:"vendorlocations",
+                localField:"_id",
+                foreignField:"vendor",
+                as:"vendor_locations"
+            }
+        },{$unwind:"$vendor_locations"},
+        {
+            "$match": { "_id": moongose.Types.ObjectId(id) }
+        }
+    ])
+    .then(result =>{
+        if(result){
+            res.status(200).json({message:"Successfully Load Data",success:"1",vendorData:result});
+        }else{
+            res.status(404).json({message:"Customer ID Not Found",success:"0",vendorData:[]});
+        }
+    })
+    .catch(error =>{
+        console.log(error);
+        res.status(500).json({message:"Upsss! Sorry",success:"0",msg:error});
+    })
+});
 
 /**
  *  Post data vendors
