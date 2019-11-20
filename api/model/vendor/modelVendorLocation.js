@@ -1,15 +1,15 @@
 const moongose = require('mongoose');
 
 const schemaVendorLocation = moongose.Schema({
-    _id: moongose.Types.ObjectId,
-    addres:String,
-    postalCode:String,
-    lat:String,
-    lng:String,
+    _id : moongose.Types.ObjectId,
+    address: String,
+    postalCode: String,
+    lat: String,
+    lng: String,
     vendor:{
-        type:moongose.Types.ObjectId,
+        type:moongose.Schema.Types.ObjectId,
         ref:"vendor"
     }
-});
+},{versionKey:false});
 
-module.export = moongose.model('vendorLocations',schemaVendorLocation);
+module.exports = moongose.model("vendorLocation",schemaVendorLocation);
