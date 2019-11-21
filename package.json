@@ -2,13 +2,13 @@
   "name": "restapi-waroenk",
   "version": "1.0.0",
   "description": "restapi app-waroenk",
-  "apidoc":{
+  "apidoc": {
     "name": "Waroenk API documentation",
     "version": "1.0.0",
     "description": "Dokemuntasi restAPI atau backend aplikasi waroenk",
-    "url":"http://localhost:3000/",
+    "url": "http://localhost:3000/",
     "template": {
-        "forceLanguage": "en"
+      "forceLanguage": "en"
     }
   },
   "main": "app.js",
@@ -17,7 +17,8 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "mongoose": "^5.7.7",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "multer": "^1.4.2"
   },
   "devDependencies": {},
   "scripts": {

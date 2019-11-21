@@ -2,6 +2,31 @@ const express  = require('express');
 const router   = express.Router();
 const moongose = require('mongoose');
 const bycrpt   = require('bcrypt');
+//const x = require('/../../vendorRoutes/vendor_upload')
+
+// add package or module multer for upload imag
+const multer  = require('multer');
+/**
+ * The disk storage engine gives you full control on storing files to disk.
+ * source or documentation https://github.com/expressjs/multer
+ * destination is used to determine within which folder the uploaded files should be stored. 
+ * This can also be given as a string (e.g. '/tmp/uploads'). 
+ * If no destination is given, the operating system's default directory for temporary files is used.
+ * filename is used to determine what the file should be named inside the folder. 
+ * If no filename is given, each file will be given a random name that doesn't include any file extension.
+ */
+
+const storage = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,'./vendor_upload/');
+    },
+    filename:function(req,file,cb){
+        cb(null,new Date().toISOString()+file.originalname);
+    }
+})
+
+// declare place for save uploaded image
+const upload  = multer({storage:storage});
 
 // Import or include model database
 const Vendor      = require('../../model/vendor/modelvendor');
@@ -267,7 +292,7 @@ router.get('/data/:id',(req,res,next)=>{
  });
  
  // Input data vendor
- router.post('/data',(req,res,next)=>{
+ router.post('/data',upload.single("photo"),(req,res,next)=>{
      VendorData.find({vendor:req.body.idVendor}).exec()
      .then(result =>{
          if(result.length >= 1){
@@ -279,7 +304,7 @@ router.get('/data/:id',(req,res,next)=>{
                  lastName:  req.body.lastName,
                  birth  :   req.body.birth,
                  phone  :   req.body.phone,
-                 photo  :   req.body.photo,
+                 photo  :   req.file.path,
                  vendor :   req.body.idVendor
              });
 
