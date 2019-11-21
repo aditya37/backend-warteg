@@ -10,8 +10,66 @@ const VendorLocation = require('../../model/vendor/modelVendorLocation');
 const VendorRegion = require('../../model/vendor/modelVendorRegion');
 
 /**
- * Get data vendor
- */
+ * @api {get} vendors/ Get Data Vendor
+ * @apiName Get Data Vendor
+ * @apiVersion 1.0.0
+ * @apiGroup Vendor
+ * @apiDescription 
+ * Menampilkan data  vendor yang telah diterdaftar dalam sistem,
+ * hasil atau respon dari method ini berupa data yang berformat <i>JSON Array</i>
+ * 
+ * @apiSuccess {String} _id Id Vendor
+ * @apiSuccess {String} username Username Vendor
+ * @apiSuccess {String} email Emaail Vendor
+ * @apiSuccess {String} password Password Vendor Yang Sudah dienkripsi
+ * @apiSuccess {Date} dateCreated Tanggal Registrasi Vendor
+ * @apiSuccess {Date} dateUpdated Tanggal vendor melakukan perubahan akun </br> ex: Update Username atau ganti kata sandi
+ * @apiSuccess {Array} vendor_datas berisi data vendor 
+ * @apiSuccess {Array} vendor_regions berisi data regional vendor
+ * @apiSuccess {Array} vendor_locations berisi data alamat vendor
+ * @apiSuccessExample {json} Success Load Data
+ * HTTP/1.1 200 OK
+ * {
+  "message": "Successfully Load Data Vendors",
+  "success": "1",
+  "count": 1,
+  "vendor_datas": [
+    {
+      "_id": "5dd4e4abf268de46554a0d74",
+      "username": "vendor_test",
+      "email": "vendor_123@gmail.com",
+      "password": "$2b$10$Hc.L4/nS44Cz7J2FNzHXvu1Y1dxUH3kAulchkrzpne1uMNXl8tR22",
+      "dateCreated": "2019-02-11T00:00:00.000Z",
+      "dateUpdated": "2019-03-22T00:00:00.000Z",
+      "vendor_datas": {
+        "_id": "5dd4ea77ebf83e4be3073799",
+        "firstName": "Agus",
+        "lastName": "yuhu",
+        "birth": "2019-02-22T00:00:00.000Z",
+        "phone": "08124444",
+        "photo": "www.google.com",
+        "vendor": "5dd4e4abf268de46554a0d74"
+      },
+      "vendor_regions": {
+        "_id": "5dd4e4bbf268de46554a0d75",
+        "administrative_area_level_1": "Jawa Timur",
+        "administrative_area_level_2": "Bojonegoro",
+        "administrative_area_level_3": "Dander",
+        "administrative_area_level_4": "Mojoranu",
+        "vendor": "5dd4e4abf268de46554a0d74"
+      },
+      "vendor_locations": {
+        "_id": "5dd4e97bebf83e4be3073798",
+        "address": "Jln Haryo Metahun No 234",
+        "postalCode": "62171",
+        "lat": "1100",
+        "lng": "-222",
+        "vendor": "5dd4e4abf268de46554a0d74"
+      }
+    }
+  ]
+}
+*/
 
 router.get('/',(req,res,next)=>{
     Vendor.aggregate([
@@ -53,6 +111,75 @@ router.get('/',(req,res,next)=>{
     })
 });
 
+
+/**
+ * @api {get} vendors/data/id Get Data Vendor By ID
+ * @apiName Get Data Vendor By ID
+ * @apiVersion 1.0.0
+ * @apiGroup Vendor
+ * @apiDescription 
+ * Menampilkan data  vendor berdasarkan ID yang telah diterdaftar dalam sistem,
+ * hasil atau respon dari method ini berupa data yang berformat <i>JSON Array</i>
+ * 
+ * @apiParam {String} _id ID Vendor yang telah terdaftar
+ * 
+ *  @apiParamExample {json} Request-Example:
+ *    {
+ *      http://localhost:3000/vendors/data/id
+ *    }
+ * 
+ * @apiSuccess {String} _id Id Vendor
+ * @apiSuccess {String} username Username Vendor
+ * @apiSuccess {String} email Emaail Vendor
+ * @apiSuccess {String} password Password Vendor Yang Sudah dienkripsi
+ * @apiSuccess {Date} dateCreated Tanggal Registrasi Vendor
+ * @apiSuccess {Date} dateUpdated Tanggal vendor melakukan perubahan akun </br> ex: Update Username atau ganti kata sandi
+ * @apiSuccess {Array} vendor_datas berisi data vendor 
+ * @apiSuccess {Array} vendor_regions berisi data regional vendor
+ * @apiSuccess {Array} vendor_locations berisi data alamat vendor
+ * @apiSuccessExample {json} Success Load Data
+ * HTTP/1.1 200 OK
+ * {
+  "message": "Successfully Load Data Vendors",
+  "success": "1",
+  "count": 1,
+  "vendor_datas": [
+    {
+      "_id": "5dd4e4abf268de46554a0d74",
+      "username": "vendor_test",
+      "email": "vendor_123@gmail.com",
+      "password": "$2b$10$Hc.L4/nS44Cz7J2FNzHXvu1Y1dxUH3kAulchkrzpne1uMNXl8tR22",
+      "dateCreated": "2019-02-11T00:00:00.000Z",
+      "dateUpdated": "2019-03-22T00:00:00.000Z",
+      "vendor_datas": {
+        "_id": "5dd4ea77ebf83e4be3073799",
+        "firstName": "Agus",
+        "lastName": "yuhu",
+        "birth": "2019-02-22T00:00:00.000Z",
+        "phone": "08124444",
+        "photo": "www.google.com",
+        "vendor": "5dd4e4abf268de46554a0d74"
+      },
+      "vendor_regions": {
+        "_id": "5dd4e4bbf268de46554a0d75",
+        "administrative_area_level_1": "Jawa Timur",
+        "administrative_area_level_2": "Bojonegoro",
+        "administrative_area_level_3": "Dander",
+        "administrative_area_level_4": "Mojoranu",
+        "vendor": "5dd4e4abf268de46554a0d74"
+      },
+      "vendor_locations": {
+        "_id": "5dd4e97bebf83e4be3073798",
+        "address": "Jln Haryo Metahun No 234",
+        "postalCode": "62171",
+        "lat": "1100",
+        "lng": "-222",
+        "vendor": "5dd4e4abf268de46554a0d74"
+      }
+    }
+  ]
+}
+*/
 router.get('/data/:id',(req,res,next)=>{
     const id = req.params.id;
     Vendor.aggregate([

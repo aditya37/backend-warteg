@@ -5,12 +5,13 @@ const bycrpt  = require('bcrypt');
 const Vendor = require('../../model/vendor/modelvendor');
 
 /**
- * @api {post} auth/authVendor
+ * @api {post} auth/authVendor Auth Vendor
+ * @apiVersion 1.0.0
  * @apiName AuthVendor
  * @apiGroup Vendor
  * @apiDescription 
- * Auth berfungsi untuk proses autentikasi akun vendor, baik vendor lama atau vendor yang baru terdaftar dalam sistem aplikasi ini
- * jika proses autentikasi berhasil nanti akan muncul pesan atau respon berupa json, respon tersebut berfungsi untuk proses selanjutnya
+ * Gunakan method ini untuk melakukan autentikasi vendor, 
+ * jika autentikasi berhasil sistem akan menampilkan data berupa format JSON dan akan digunakan di request selanjutnya
  * 
  * @apiParam {String} Username username vendor yang terdaftar
  * @apiParam {String} Password
@@ -29,6 +30,7 @@ const Vendor = require('../../model/vendor/modelvendor');
  * @apiSuccess {Date} dateCreated Tanggal Registrasi Vendor
  * @apiSuccess {Date} dateUpdated Tanggal vendor melakukan perubahan akun </br> ex: Update Username atau ganti kata sandi
  * @apiSuccessExample {json} Success Auth
+ * HTTP/1.1 200 OK
  * {
  *     "success":"1"
  *     "message": "Login Sucessfully",
@@ -44,6 +46,7 @@ const Vendor = require('../../model/vendor/modelvendor');
  *     ]
  * }
  * @apiSuccessExample {json} Failed Auth
+ * HTTP/1.1 401 Unauthorized
  * {
  *  "Success": "0"
  *  "message": "Gagal"

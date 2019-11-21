@@ -2,10 +2,11 @@
   {
     "type": "post",
     "url": "auth/authVendor",
-    "title": "",
+    "title": "Auth Vendor",
+    "version": "1.0.0",
     "name": "AuthVendor",
     "group": "Vendor",
-    "description": "<p>Auth berfungsi untuk proses autentikasi akun vendor, baik vendor lama atau vendor yang baru terdaftar dalam sistem aplikasi ini jika proses autentikasi berhasil nanti akan muncul pesan atau respon berupa json, respon tersebut berfungsi untuk proses selanjutnya</p>",
+    "description": "<p>Gunakan method ini untuk melakukan autentikasi vendor, jika autentikasi berhasil sistem akan menampilkan data berupa format JSON dan akan digunakan di request selanjutnya</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -83,18 +84,211 @@
       "examples": [
         {
           "title": "Success Auth",
-          "content": "{\n    \"success\":\"1\"\n    \"message\": \"Login Sucessfully\",\n    \"vendor\": [\n       {\n            \"_id\": \"5dd59c87cf1f4129a5b9d060\",\n            \"username\": \"vendorTes\",\n            \"email\": \"vendorTes@gmail.com\",\n            \"password\": \"$2b$10$SlhI.v.hhqwJaOWKp.ZMC.GMt2NP2HC17JLhqD8kLteX49Vq3pkKm\",\n            \"dateCreated\": \"2019-02-22T00:00:00.000Z\",\n            \"dateUpdated\": \"2019-03-22T00:00:00.000Z\"\n       }\n    ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"success\":\"1\"\n    \"message\": \"Login Sucessfully\",\n    \"vendor\": [\n       {\n            \"_id\": \"5dd59c87cf1f4129a5b9d060\",\n            \"username\": \"vendorTes\",\n            \"email\": \"vendorTes@gmail.com\",\n            \"password\": \"$2b$10$SlhI.v.hhqwJaOWKp.ZMC.GMt2NP2HC17JLhqD8kLteX49Vq3pkKm\",\n            \"dateCreated\": \"2019-02-22T00:00:00.000Z\",\n            \"dateUpdated\": \"2019-03-22T00:00:00.000Z\"\n       }\n    ]\n}",
           "type": "json"
         },
         {
           "title": "Failed Auth",
-          "content": "{\n \"Success\": \"0\"\n \"message\": \"Gagal\"\n}",
+          "content": "HTTP/1.1 401 Unauthorized\n{\n \"Success\": \"0\"\n \"message\": \"Gagal\"\n}",
           "type": "json"
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "./api/routes/authRoutes/authVendor.js",
+    "groupTitle": "Vendor"
+  },
+  {
+    "type": "get",
+    "url": "vendors/",
+    "title": "Get Data Vendor",
+    "name": "Get_Data_Vendor",
+    "version": "1.0.0",
+    "group": "Vendor",
+    "description": "<p>Menampilkan data  vendor yang telah diterdaftar dalam sistem, hasil atau respon dari method ini berupa data yang berformat <i>JSON Array</i></p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id Vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Username Vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Emaail Vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Password Vendor Yang Sudah dienkripsi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "dateCreated",
+            "description": "<p>Tanggal Registrasi Vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "dateUpdated",
+            "description": "<p>Tanggal vendor melakukan perubahan akun </br> ex: Update Username atau ganti kata sandi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "vendor_datas",
+            "description": "<p>berisi data vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "vendor_regions",
+            "description": "<p>berisi data regional vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "vendor_locations",
+            "description": "<p>berisi data alamat vendor</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success Load Data",
+          "content": "HTTP/1.1 200 OK\n{\n  \"message\": \"Successfully Load Data Vendors\",\n  \"success\": \"1\",\n  \"count\": 1,\n  \"vendor_datas\": [\n    {\n      \"_id\": \"5dd4e4abf268de46554a0d74\",\n      \"username\": \"vendor_test\",\n      \"email\": \"vendor_123@gmail.com\",\n      \"password\": \"$2b$10$Hc.L4/nS44Cz7J2FNzHXvu1Y1dxUH3kAulchkrzpne1uMNXl8tR22\",\n      \"dateCreated\": \"2019-02-11T00:00:00.000Z\",\n      \"dateUpdated\": \"2019-03-22T00:00:00.000Z\",\n      \"vendor_datas\": {\n        \"_id\": \"5dd4ea77ebf83e4be3073799\",\n        \"firstName\": \"Agus\",\n        \"lastName\": \"yuhu\",\n        \"birth\": \"2019-02-22T00:00:00.000Z\",\n        \"phone\": \"08124444\",\n        \"photo\": \"www.google.com\",\n        \"vendor\": \"5dd4e4abf268de46554a0d74\"\n      },\n      \"vendor_regions\": {\n        \"_id\": \"5dd4e4bbf268de46554a0d75\",\n        \"administrative_area_level_1\": \"Jawa Timur\",\n        \"administrative_area_level_2\": \"Bojonegoro\",\n        \"administrative_area_level_3\": \"Dander\",\n        \"administrative_area_level_4\": \"Mojoranu\",\n        \"vendor\": \"5dd4e4abf268de46554a0d74\"\n      },\n      \"vendor_locations\": {\n        \"_id\": \"5dd4e97bebf83e4be3073798\",\n        \"address\": \"Jln Haryo Metahun No 234\",\n        \"postalCode\": \"62171\",\n        \"lat\": \"1100\",\n        \"lng\": \"-222\",\n        \"vendor\": \"5dd4e4abf268de46554a0d74\"\n      }\n    }\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./api/routes/vendorRoutes/vendor.js",
+    "groupTitle": "Vendor"
+  },
+  {
+    "type": "get",
+    "url": "vendors/data/id",
+    "title": "Get Data Vendor By ID",
+    "name": "Get_Data_Vendor_By_ID",
+    "version": "1.0.0",
+    "group": "Vendor",
+    "description": "<p>Menampilkan data  vendor berdasarkan ID yang telah diterdaftar dalam sistem, hasil atau respon dari method ini berupa data yang berformat <i>JSON Array</i></p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID Vendor yang telah terdaftar</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  http://localhost:3000/vendors/data/id\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id Vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Username Vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Emaail Vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Password Vendor Yang Sudah dienkripsi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "dateCreated",
+            "description": "<p>Tanggal Registrasi Vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "dateUpdated",
+            "description": "<p>Tanggal vendor melakukan perubahan akun </br> ex: Update Username atau ganti kata sandi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "vendor_datas",
+            "description": "<p>berisi data vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "vendor_regions",
+            "description": "<p>berisi data regional vendor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "vendor_locations",
+            "description": "<p>berisi data alamat vendor</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success Load Data",
+          "content": "HTTP/1.1 200 OK\n{\n  \"message\": \"Successfully Load Data Vendors\",\n  \"success\": \"1\",\n  \"count\": 1,\n  \"vendor_datas\": [\n    {\n      \"_id\": \"5dd4e4abf268de46554a0d74\",\n      \"username\": \"vendor_test\",\n      \"email\": \"vendor_123@gmail.com\",\n      \"password\": \"$2b$10$Hc.L4/nS44Cz7J2FNzHXvu1Y1dxUH3kAulchkrzpne1uMNXl8tR22\",\n      \"dateCreated\": \"2019-02-11T00:00:00.000Z\",\n      \"dateUpdated\": \"2019-03-22T00:00:00.000Z\",\n      \"vendor_datas\": {\n        \"_id\": \"5dd4ea77ebf83e4be3073799\",\n        \"firstName\": \"Agus\",\n        \"lastName\": \"yuhu\",\n        \"birth\": \"2019-02-22T00:00:00.000Z\",\n        \"phone\": \"08124444\",\n        \"photo\": \"www.google.com\",\n        \"vendor\": \"5dd4e4abf268de46554a0d74\"\n      },\n      \"vendor_regions\": {\n        \"_id\": \"5dd4e4bbf268de46554a0d75\",\n        \"administrative_area_level_1\": \"Jawa Timur\",\n        \"administrative_area_level_2\": \"Bojonegoro\",\n        \"administrative_area_level_3\": \"Dander\",\n        \"administrative_area_level_4\": \"Mojoranu\",\n        \"vendor\": \"5dd4e4abf268de46554a0d74\"\n      },\n      \"vendor_locations\": {\n        \"_id\": \"5dd4e97bebf83e4be3073798\",\n        \"address\": \"Jln Haryo Metahun No 234\",\n        \"postalCode\": \"62171\",\n        \"lat\": \"1100\",\n        \"lng\": \"-222\",\n        \"vendor\": \"5dd4e4abf268de46554a0d74\"\n      }\n    }\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./api/routes/vendorRoutes/vendor.js",
     "groupTitle": "Vendor"
   },
   {

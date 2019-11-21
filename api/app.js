@@ -56,7 +56,6 @@ app.use((req,res,next)=>{
   next();
 });
 
-
 // declare route
 app.use('/products',productRoutes);
 app.use('/vendors',vendoRoutes);

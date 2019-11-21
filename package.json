@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "restapi app-waroenk",
   "apidoc":{
-    "title": "Waroenk API documentation",
-    "url":"http://localhost:3000/"
+    "name": "Waroenk API documentation",
+    "version": "1.0.0",
+    "description": "Dokemuntasi restAPI atau backend aplikasi waroenk",
+    "url":"http://localhost:3000/",
+    "template": {
+        "forceLanguage": "en"
+    }
   },
   "main": "app.js",
   "dependencies": {
