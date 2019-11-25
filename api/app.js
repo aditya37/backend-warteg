@@ -31,11 +31,13 @@ mongoose.connect(
 
 // menampilkan log ke dalam console
 app.use(log('combined'));
+app.use('/upload',express.static('./vendor_upload'));
 
 //body parser
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+// upload route
 app.use(bodyParser.json());
 
 // CORS - Corss - Origin - Resource - Sharing
@@ -60,6 +62,8 @@ app.use((req,res,next)=>{
 app.use('/products',productRoutes);
 app.use('/vendors',vendoRoutes);
 app.use('/customers',customerRoutes);
+
+// image por file uploaf route
 
 // Declare Authentication route
 app.use('/auth/customer/',authCustomer);

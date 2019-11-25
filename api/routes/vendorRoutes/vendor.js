@@ -2,9 +2,9 @@ const express  = require('express');
 const router   = express.Router();
 const moongose = require('mongoose');
 const bycrpt   = require('bcrypt');
-//const x = require('/../../vendorRoutes/vendor_upload')
 
-// add package or module multer for upload imag
+
+// add package or module multer for upload image
 const multer  = require('multer');
 /**
  * The disk storage engine gives you full control on storing files to disk.
@@ -15,18 +15,32 @@ const multer  = require('multer');
  * filename is used to determine what the file should be named inside the folder. 
  * If no filename is given, each file will be given a random name that doesn't include any file extension.
  */
-
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,'./vendor_upload/');
+        cb(null,'./vendor_upload');
     },
-    filename:function(req,file,cb){
+    filename:function(req,file,cb) {
         cb(null,new Date().toISOString()+file.originalname);
     }
 })
 
+// filter uplod file
+const fileFilter = (req,file,cb) =>{
+    if(file.mimetype == 'image/jpeg' || file.mimetype == 'image/png'){
+        cb(null,true);
+    }else{
+        cb(null,false);        
+    }
+};
 // declare place for save uploaded image
-const upload  = multer({storage:storage});
+const upload = multer({
+    storage:storage,
+    // limit upload filesize 
+    limits:{
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
+});
 
 // Import or include model database
 const Vendor      = require('../../model/vendor/modelvendor');
