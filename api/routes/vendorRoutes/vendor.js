@@ -252,6 +252,7 @@ router.get('/data/:id',(req,res,next)=>{
     ])
     .then(result =>{
         if(result){
+            console.log(result);
             res.status(200).json({message:"Successfully Load Data",success:"1",vendorData:result});
         }else{
             res.status(404).json({message:"Customer ID Not Found",success:"0",vendorData:[]});
@@ -410,5 +411,20 @@ router.get('/data/:id',(req,res,next)=>{
          res.status(500).json({msg:erorr})
      });
  });
+
+/**
+ * Delete Vendor datas
+ */
+router.delete('/:id',(req,res,next)=>{
+    Vendor.deleteOne({idVendor:req.body.idVendor})
+    .exec()
+    .then(result =>{
+        res.status(200).json({message:"success delete this account,thank you for your trust and support",success:"1"})
+    })
+    .catch(error =>{
+        console.log(error)
+        res.status(500).json({status:"0",message:"Sorry!!",err:error});
+    })
+});
 
 module.exports = router;

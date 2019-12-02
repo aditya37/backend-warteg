@@ -1,9 +1,10 @@
 const express = require('express');
 const router  = express.Router();
 const bycrpt  = require('bcrypt');
+const mongoose = require('mongoose');
 
 const Vendor = require('../../model/vendor/modelvendor');
-
+const VendorLog = require('../../model/vendor/modelVendorLog');
 /**
  * @api {post} auth/authVendor Auth Vendor
  * @apiVersion 1.0.0
@@ -52,7 +53,8 @@ const Vendor = require('../../model/vendor/modelvendor');
  *  "message": "Gagal"
  * }
  */
-// Get All Customer datas
+
+// Auth Vendor
 router.post('/',(req,res,next)=>{
   Vendor.find({username:req.body.username}).exec()
    .then(vendor =>{
@@ -76,4 +78,38 @@ router.post('/',(req,res,next)=>{
    })
 });
   
+// Vendor Log
+router.post('/log',(req,res,next)=>{
+  const vendorlog = new VendorLog({
+    _id: new mongoose.Types.ObjectId(),
+    deviceName: req.body.deviceName,
+    androidVersion: req.body.androidVersion,
+    dateLogin: req.body.dateLogin,
+    vendor: req.body.idVendor
+  });
+
+  VendorLog.find({vendor:req.body.idVendor}).exec()
+  .then(result =>{
+    if(result.length >= 1){
+      return res.status(409).json({message:"Sorry You Has been logged on another device",success:"1",vendorlog:result});
+    }else{
+      vendorlog.save()
+      .then(result =>{
+        console.log(result)
+        res.status(201).json({message:"Successfully Save Authentication Vendor Log",succes:"1",vendorlog:result});
+      })
+      .catch(error =>{
+        console.log(error)
+        res.status(500).json({message:"Failed Save Authentication Vendor Log",status:"0",error: error });
+      })
+    }
+  })
+  .catch(error=>{
+    console.log(error)
+    res.status(500).json({message:"Opps Sorry",success:"0",msg:error});
+  })
+});
+
+// Get Vendor Log
+router.get('/log/data/:id',(req,res,next)=>{});
 module.exports = router;

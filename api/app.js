@@ -31,6 +31,7 @@ mongoose.connect(
 
 // menampilkan log ke dalam console
 app.use(log('combined'));
+// add route for show image
 app.use('/upload',express.static('./vendor_upload'));
 
 //body parser
