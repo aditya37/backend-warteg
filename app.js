@@ -2,6 +2,11 @@
 const express = require('express');
 const app = express();
 
+// Create Server
+const port   = process.env.PORT || 3000;
+const http   = require('http');
+const server = http.createServer(http);
+
 // loging
 const log = require('morgan');
 
@@ -85,4 +90,7 @@ app.use((error,req,res,next) => {
     });
 });
 
+server.listen(port,()=>{
+  console.log("Server Run On Port "+ port);
+});
 module.exports = app;
