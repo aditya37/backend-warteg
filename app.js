@@ -5,7 +5,7 @@ const app = express();
 // Create Server
 const port   = process.env.PORT || 3000;
 const http   = require('http');
-const server = http.createServer(http);
+const server = http.createServer(app);
 
 // loging
 const log = require('morgan');
@@ -17,13 +17,13 @@ const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 
 // route authentication
-const authCustomer   = require('./routes/authRoutes/authCustomer');
-const authVendor     = require('./routes/authRoutes/authVendor');
+const authCustomer   = require('./api/routes/authRoutes/authCustomer');
+const authVendor     = require('./api/routes/authRoutes/authVendor');
 
 // import file routes
-const productRoutes  = require('./routes/productRoutes/product');
-const customerRoutes = require('./routes/customerRoutes/customer');
-const vendoRoutes    = require('./routes/vendorRoutes/vendor')
+const productRoutes  = require('./api/routes/productRoutes/product');
+const customerRoutes = require('./api/routes/customerRoutes/customer');
+const vendoRoutes    = require('./api/routes/vendorRoutes/vendor')
 
 // koneksi ke db
 mongoose.connect(
