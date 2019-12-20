@@ -123,8 +123,8 @@ exports.register_customer =(req,res,next)=>{
               username:req.body.username,
               email: req.body.email,
               password:hash,
-              dateCreated:req.body.dateCreated,
-              updateCreated:req.body.updateCreated
+              dateCreated:Date.now(),
+              updateCreated:Date.now()
             });
   
             customerRegister.save()
@@ -173,8 +173,6 @@ exports.add_customer_region =(req,res,next)=>{
       administrative_area_level_2: req.body.kota,
       administrative_area_level_3: req.body.kecamatan,
       administrative_area_level_4: req.body.desa,
-      postalCode:req.body.kodepos,
-      address:req.body.alamat,
       customer: req.body.idCustomer
     });
   
@@ -199,6 +197,8 @@ exports.add_customer_region =(req,res,next)=>{
 };
 exports.add_customer_coordinat =(req,res,next)=>{
     const coordinatCustomer = new CustomerLocation({
+      address: req.body.alamat,
+      postalCode: req.body.kodepos,
       lat: req.body.lat,
       lng: req.body.lng,
       customer: req.body.idCustomer
