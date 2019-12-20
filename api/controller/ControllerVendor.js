@@ -294,5 +294,14 @@ exports.vendor_log   =(req,res,next)=>{
       res.status(500).json({message:"Opps Sorry",success:"0",msg:error});
     })
 };
-exports.get_vendor_log=(req,res,next)=>{};
+exports.get_vendor_log=(req,res,next)=>{
+    VendorLog.find({vendor:req.params.id})
+    .then(result =>{
+        res.status(200).json({message:"Success Load Log data",status:"1",result:result});
+    })
+    .catch(error =>{
+        console.log(error);
+        res.status(500).json({message:"Failed Load Log Data",status:"0",msg: error});
+    });
+};
 
