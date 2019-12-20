@@ -294,10 +294,14 @@ exports.customer_log =(req,res,next)=>{
 exports.get_customer_log =(req,res,next)=>{
   CustomerLog.find({customer:req.params.id})
     .then(result =>{
-        res.status(200).json({message:"Success Load Log data",status:"1",result:result});
+        if(result.length >= 1){
+          res.status(200).json({message:"Success Load Log data",count:result.length,status:"1",result:result});
+        }else{
+          res.status(200).json({message:"Sorry",status:"0",result:result});
+        }
     })
     .catch(error =>{
         console.log(error);
-        res.status(500).json({message:"Failed Load Log Data",status:"0",msg: error});
+        res.status(500).json({message:"Failed Load Log Data",status:"0",msg:"Error"});
     });
 };
