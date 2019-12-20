@@ -269,29 +269,17 @@ exports.vendor_log   =(req,res,next)=>{
       _id: new mongoose.Types.ObjectId(),
       deviceName: req.body.deviceName,
       androidVersion: req.body.androidVersion,
-      dateLogin: req.body.dateLogin,
+      dateLogin: Date.now(),
       vendor: req.body.idVendor
     });
   
-    VendorLog.find({vendor:req.body.idVendor}).exec()
+    vendorlog.save()
     .then(result =>{
-      if(result.length >= 1){
-        return res.status(409).json({message:"Sorry You Has been logged on another devices",success:"1",vendorlog:result});
-      }else{
-        vendorlog.save()
-        .then(result =>{
-          console.log(result)
-          res.status(201).json({message:"Successfully Save Authentication Vendor Log",succes:"1",vendorlog:result});
-        })
-        .catch(error =>{
-          console.log(error)
-          res.status(500).json({message:"Failed Save Authentication Vendor Log",status:"0",error: error });
-        })
-      }
+        res.status(201).json({message:"Successfully Save Authentication Vendor Log",success:"1",vendorlog:result});
     })
     .catch(error=>{
       console.log(error)
-      res.status(500).json({message:"Opps Sorry",success:"0",msg:error});
+      res.status(500).json({message:"Failed Save Authentication Vendor Log",success:"0",msg: error });
     })
 };
 exports.get_vendor_log=(req,res,next)=>{

@@ -11,4 +11,5 @@ router.post('/log',ControllerVendor.vendor_log);
 
 // Get Vendor Log
 router.get('/log/:id',ControllerVendor.get_vendor_log);
+
 module.exports = router;
