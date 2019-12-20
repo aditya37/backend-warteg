@@ -6,6 +6,7 @@ const Customer        = require('../model/customer/modelcustomer');
 const dataCustomer    = require('../model/customer/ModelcustomerData');
 const CustomerRegion  = require('../model/customer/modelCustomerRegion');
 const CustomerLocation= require('../model/customer/customerLocation');
+const CustomerLog     = require('../model/customer/modelCustomerLog');
 
 exports.get_customers = (req,res,next)=>{
     Customer.aggregate([
@@ -269,5 +270,34 @@ exports.update_customer_coordinat =(req,res,next)=>{
     })
     .catch(error =>{
       res.status(500).json({message:"Sorry Please turn your gps",succes:"0"});
+    });
+};
+exports.customer_log =(req,res,next)=>{
+
+  const customerLog = new CustomerLog({
+    _id: new mongoose.Types.ObjectId(),
+    deviceName: req.body.deviceName,
+    androidVersion: req.body.androidVersion,
+    dateLogin: Date.now(),
+    customer: req.body.idCustomer
+  });
+
+  customerLog.save()
+  .then(result =>{
+      res.status(201).json({message:"Successfully Save Authentication Customer Log",success:"1",customerLog:result});
+  })
+  .catch(error=>{
+    console.log(error)
+    res.status(500).json({message:"Failed Save Authentication Customer Log",success:"0",msg: error });
+  })
+};
+exports.get_customer_log =(req,res,next)=>{
+  CustomerLog.find({customer:req.params.id})
+    .then(result =>{
+        res.status(200).json({message:"Success Load Log data",status:"1",result:result});
+    })
+    .catch(error =>{
+        console.log(error);
+        res.status(500).json({message:"Failed Load Log Data",status:"0",msg: error});
     });
 };
