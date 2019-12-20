@@ -106,8 +106,8 @@ exports.register_vendor =(req,res,next)=>{
                        username:req.body.username,
                        email:req.body.email,
                        password:hash,
-                       dateCreated:req.body.dateCreated,
-                       dateUpdated:req.body.dateUpdated
+                       dateCreated:Date.now(),
+                       dateUpdated:Date.now()
                    });
 
                    vendorRegister.save()
