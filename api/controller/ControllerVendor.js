@@ -276,7 +276,7 @@ exports.vendor_log   =(req,res,next)=>{
     VendorLog.find({vendor:req.body.idVendor}).exec()
     .then(result =>{
       if(result.length >= 1){
-        return res.status(409).json({message:"Sorry You Has been logged on another device",success:"1",vendorlog:result});
+        return res.status(409).json({message:"Sorry You Has been logged on another devices",success:"1",vendorlog:result});
       }else{
         vendorlog.save()
         .then(result =>{
