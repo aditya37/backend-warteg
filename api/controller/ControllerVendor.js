@@ -229,10 +229,14 @@ exports.add_vendor_location=(req,res,next)=>{
      });
 };
 exports.delete_vendor =(req,res,next)=>{
-    Vendor.deleteOne({idVendor:req.body.idVendor})
-    .exec()
+    Vendor.findOne({"_id":req.params.id})
     .then(result =>{
-        res.status(200).json({message:"success delete this account,thank you for your trust and support",success:"1"})
+        if(result <= 1){
+            res.status(204).json({message:"Failed Delete Account",success:"0"});
+        }else{
+            result.remove();
+            res.status(200).json({message:"Successfully Delete Account",success:"1"})
+        }
     })
     .catch(error =>{
         console.log(error)
