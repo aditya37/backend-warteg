@@ -232,7 +232,7 @@ exports.delete_vendor =(req,res,next)=>{
     Vendor.findOne({"_id":req.params.id})
     .then(result =>{
         if(result <= 1){
-            res.status(204).json({message:"Failed Delete Account",success:"0"});
+            res.status(410).json({message:"Account Has Been Deleted",success:"0",result:result});
         }else{
             result.remove();
             res.status(200).json({message:"Successfully Delete Account",success:"1"})

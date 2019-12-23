@@ -25,6 +25,9 @@ const productRoutes  = require('./api/routes/productRoutes/product');
 const customerRoutes = require('./api/routes/customerRoutes/customer');
 const vendoRoutes    = require('./api/routes/vendorRoutes/vendor')
 
+// import route for regions at indonesia
+const regionRoutes   = require('./api/routes/regionRoutes/regions');
+
 // koneksi ke db
 mongoose.connect(
   "mongodb://localhost:27017/db_waroenk",{
@@ -69,11 +72,13 @@ app.use('/products',productRoutes);
 app.use('/vendors',vendoRoutes);
 app.use('/customers',customerRoutes);
 
-// image por file uploaf route
 
 // Declare Authentication route
 app.use('/auth/customer/',authCustomer);
 app.use('/auth/vendor/',authVendor);
+
+// Declare Indonesia Regions route
+app.use('/regions/indonesia/',regionRoutes);
 
 // error handling
 app.use((req,res,next )=> {
