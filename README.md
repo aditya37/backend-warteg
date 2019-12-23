@@ -6,6 +6,6 @@ Beberapa fitur yang akan di terapkan di project ini :
 - Lokasi warung makan,warung kopi dan warung lainnya
 - Lokasi yang terdekat dengan anda
 - Informasi warung yang buka 24 jam 
-- Fitur tracking 
+- Fitur tracking atau mengantar barang pesanan
 
 Jika anda ingin berpartiisipasi dalam project ini, anda bisa hubungi saya melalui DM instagram
