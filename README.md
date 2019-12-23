@@ -1,4 +1,4 @@
-# backend-warteg
+# backend-warteg (Super Warteg)
 Sebuah project kecil bertujuan untuk mencari sebuah warung khususnya warung makan yang berada di sekitar anda. 
 project ini cocok bagi para anak kost dan para backpacker yang sedang singgah di suatu tempat atau lokasi.
 
