@@ -15,7 +15,8 @@ const multer  = require('multer');
  * filename is used to determine what the file should be named inside the folder. 
  * If no filename is given, each file will be given a random name that doesn't include any file extension.
  */
-const storage = multer.diskStorage({
+// declare storage
+const storageVendor = multer.diskStorage({
     destination:function(req,file,cb){
         cb(null,'./vendor_upload');
     },
@@ -23,7 +24,14 @@ const storage = multer.diskStorage({
         cb(null,new Date().toISOString()+file.originalname);
     }
 })
-
+const storageToko = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,'./toko_upload');
+    },
+    filename:function(req,file,cb) {
+        cb(null,new Date().toISOString()+file.originalname);
+    }
+})
 // filter uplod file
 const fileFilter = (req,file,cb) =>{
     if(file.mimetype == 'image/jpeg' || file.mimetype == 'image/png'){
@@ -32,13 +40,19 @@ const fileFilter = (req,file,cb) =>{
         cb(null,false);        
     }
 };
-// declare place for save uploaded image
-const upload = multer({
-    storage:storage,
+
+// declare multer
+const uploadVendor = multer({
+    storage:storageVendor,
     // limit upload filesize 
     limits:{
         fileSize: 1024 * 1024 * 5
     },
+    fileFilter: fileFilter
+});
+const uploadToko = multer({
+    storage:storageToko,
+    limits:{fileSize: 1024*1024*5},
     fileFilter: fileFilter
 });
 
@@ -53,10 +67,10 @@ router.get('/data/:id',ControllerVendor.get_vendorid);
  router.post('/',ControllerVendor.register_vendor);
  
  // Input data vendor
- router.post('/data',upload.single("photo"),ControllerVendor.add_vendor_data);
+ router.post('/data',uploadVendor.single("photo"),ControllerVendor.add_vendor_data);
 
  // Input vendor region
- router.post('/region',ControllerVendor.add_vendor_region);
+ router.post('/region',uploadToko.single("photoToko"),ControllerVendor.add_vendor_region);
 
  router.post('/location',ControllerVendor.add_vendor_location);
 

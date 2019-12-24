@@ -2,6 +2,8 @@ const moongose = require('mongoose');
 
 const schemaVendorLocation = moongose.Schema({
     _id : moongose.Types.ObjectId,
+    namaToko:String,
+    photoToko:String,
     address: String,
     postalCode: String,
     lat: String,

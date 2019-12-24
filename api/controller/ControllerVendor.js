@@ -202,6 +202,8 @@ exports.add_vendor_location=(req,res,next)=>{
          }else{
             const vendorlocation = new VendorLocation({
                  _id:new mongoose.Types.ObjectId(),
+                namaToko:req.body.namaToko,
+                photoToko:req.file.pathToko,
                 address:req.body.alamat,
                 postalCode:req.body.kodepos,
                 lat:req.body.lat,
@@ -212,9 +214,9 @@ exports.add_vendor_location=(req,res,next)=>{
              vendorlocation.save()
              .then(result =>{
                  if(result){
-                    res.status(201).json({message:"Successfully Add Vendor Region",success:"1",vendorData:result});
+                    res.status(201).json({message:"Successfully Add Vendor Location",success:"1",vendorData:result});
                  }else{
-                    res.status(404).json({message:"Failed Insert Vendor Region",succes:"0",vendorData:[]});
+                    res.status(404).json({message:"Failed Insert Vendor Location",succes:"0",vendorData:[]});
                  }
              })
              .catch(error =>{
