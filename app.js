@@ -41,6 +41,7 @@ mongoose.connect(
 app.use(log('combined'));
 // add route for show image
 app.use('/upload',express.static('./vendor_upload'));
+app.use('/upload/toko',express.static('./toko_upload'));
 
 //body parser
 app.use(bodyParser.urlencoded({
