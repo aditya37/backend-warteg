@@ -55,25 +55,18 @@ const uploadToko = multer({
     limits:{fileSize: 1024*1024*5},
     fileFilter: fileFilter
 });
-
+/**
+ * Get Methodes
+ */
 router.get('/',ControllerVendor.get_vendors);
 router.get('/data/:id',ControllerVendor.get_vendorid);
-
 /**
  *  Post data vendors
  */
-
- // vendor Register
  router.post('/',ControllerVendor.register_vendor);
- 
- // Input data vendor
  router.post('/data',uploadVendor.single("photo"),ControllerVendor.add_vendor_data);
-
- // Input vendor region
- router.post('/region',uploadToko.single("photoToko"),ControllerVendor.add_vendor_region);
-
- router.post('/location',ControllerVendor.add_vendor_location);
-
+ router.post('/region',ControllerVendor.add_vendor_region);
+ router.post('/location',uploadToko.single("photoToko"),ControllerVendor.add_vendor_location);
 /**
  * Delete Vendor datas
  */

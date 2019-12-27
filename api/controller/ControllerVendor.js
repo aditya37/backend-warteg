@@ -8,6 +8,7 @@ const VendorLocation= require('../model/vendor/modelVendorLocation');
 const VendorRegion =  require('../model/vendor/modelVendorRegion');
 const VendorLog    =  require('../model/vendor/modelVendorLog');
 
+
 exports.get_vendors  =(req,res,next)=>{
     Vendor.aggregate([
         {
@@ -203,7 +204,8 @@ exports.add_vendor_location=(req,res,next)=>{
             const vendorlocation = new VendorLocation({
                  _id:new mongoose.Types.ObjectId(),
                 namaToko:req.body.namaToko,
-                photoToko:req.file.pathToko,
+                photoToko:req.file.path,
+                hours:req.body.hours,
                 address:req.body.alamat,
                 postalCode:req.body.kodepos,
                 lat:req.body.lat,
@@ -298,4 +300,3 @@ exports.get_vendor_log=(req,res,next)=>{
         res.status(500).json({message:"Failed Load Log Data",status:"0",msg: error});
     });
 };
-
