@@ -34,7 +34,18 @@ exports.get_vendors  =(req,res,next)=>{
                 foreignField:"vendor",
                 as:"vendor_locations"
             }
-        },{$unwind:"$vendor_locations"}
+        },{$unwind:"$vendor_locations"},
+        {
+            $project:{
+                "vendor_locations.vendor":0,
+                "vendor_locations._id":0,
+                "vendor_locations.hours._id":0,
+                "vendor_regions._id":0,
+                "vendor_regions.vendor":0,
+                "vendor_datas._id":0,
+                "vendor_datas.vendor":0,"password":0
+            }
+        }
     ])
     .then(result =>{
         if(result){
@@ -77,6 +88,17 @@ exports.get_vendorid =(req,res,next)=>{
         },{$unwind:"$vendor_locations"},
         {
             "$match": { "_id": mongoose.Types.ObjectId(id) }
+        },
+        {
+            $project:{
+                "vendor_locations.vendor":0,
+                "vendor_locations._id":0,
+                "vendor_locations.hours._id":0,
+                "vendor_regions._id":0,
+                "vendor_regions.vendor":0,
+                "vendor_datas._id":0,
+                "vendor_datas.vendor":0,"password":0
+            }
         }
     ])
     .then(result =>{
@@ -298,5 +320,31 @@ exports.get_vendor_log=(req,res,next)=>{
     .catch(error =>{
         console.log(error);
         res.status(500).json({message:"Failed Load Log Data",status:"0",msg: error});
+    });
+};
+
+exports.get_allVendor_locations =(req,res,next)=>{
+    VendorLocation.find({})
+    .select()
+    .then(result =>{
+        res.status(200).json({message:"Success Load Vendor Locations",success:"1",result:result})
+    })
+    .catch(error =>{
+        res.status(500).json({message:"Failed Load Location",status:"0",msg:error});
+    })
+};
+
+exports.get_vendor_locations_byId =(req,res,next)=>{
+    VendorLocation.find({vendor:req.params.idLocation})
+    .then(result =>{
+        if(result < 1){
+            return res.status(409).json({message:"False",status:"0",result:result});
+        }else{
+            res.status(200).json({message:"Success Load Locations",status:"1",result:result});
+        }
+    })
+    .catch(error =>{
+        console.log(error);
+        res.status(500).json({message:"Failed Load Data",success:"0",msg:error});
     });
 };

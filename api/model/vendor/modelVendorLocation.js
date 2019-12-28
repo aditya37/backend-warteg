@@ -4,12 +4,14 @@ const schemaVendorLocation = moongose.Schema({
     _id : moongose.Types.ObjectId,
     namaToko:String,
     photoToko:String,
-    hours:[{
-        hari:String,
-        jamBuka:String
-    }],
     address: String,
     postalCode: String,
+    hours:[{
+        hari:String,
+        jamBuka:String,
+        jamTutup:String,
+        nonStop:String
+    }],
     lat: String,
     lng: String,
     vendor:{

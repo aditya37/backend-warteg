@@ -60,6 +60,8 @@ const uploadToko = multer({
  */
 router.get('/',ControllerVendor.get_vendors);
 router.get('/data/:id',ControllerVendor.get_vendorid);
+router.get('/locations',ControllerVendor.get_allVendor_locations);
+router.get('/locations/:idLocation',ControllerVendor.get_vendor_locations_byId);
 /**
  *  Post data vendors
  */
