@@ -9,8 +9,7 @@ const schemaVendorLocation = moongose.Schema({
     hours:[{
         hari:String,
         jamBuka:String,
-        jamTutup:String,
-        nonStop:String
+        jamTutup:String
     }],
     lat: String,
     lng: String,

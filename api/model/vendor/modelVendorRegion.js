@@ -6,8 +6,6 @@ const schemaVendorRegion = moongose.Schema({
     administrative_area_level_2: String,
     administrative_area_level_3: String,
     administrative_area_level_4: String,
-    postalCode: String,
-    address: String,
     vendor:{
         type:moongose.Schema.Types.ObjectId,
         ref:"vendor"

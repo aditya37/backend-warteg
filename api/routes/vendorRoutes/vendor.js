@@ -61,17 +61,25 @@ const uploadToko = multer({
 router.get('/',ControllerVendor.get_vendors);
 router.get('/data/:id',ControllerVendor.get_vendorid);
 router.get('/locations',ControllerVendor.get_allVendor_locations);
-router.get('/locations/:idLocation',ControllerVendor.get_vendor_locations_byId);
+router.get('/locations/:idLocation',ControllerVendor.get_detail_locations_byId);
+
 /**
- *  Post data vendors
+ *  Post data
  */
  router.post('/',ControllerVendor.register_vendor);
  router.post('/data',uploadVendor.single("photo"),ControllerVendor.add_vendor_data);
  router.post('/region',ControllerVendor.add_vendor_region);
  router.post('/location',uploadToko.single("photoToko"),ControllerVendor.add_vendor_location);
 /**
- * Delete Vendor datas
+ * Delete Vendor 
  */
 router.delete('/:id',ControllerVendor.delete_vendor);
+/**
+ * Update Vendor
+ */
+router.patch('/',ControllerVendor.update_vendor);
+router.patch('/data',uploadVendor.single("photo"),ControllerVendor.vendor_data_update);
+router.patch('/region',ControllerVendor.update_vendor_region);
+router.patch('/location',uploadToko.single("photoToko"),ControllerVendor.update_location);
 
 module.exports = router;

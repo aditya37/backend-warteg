@@ -128,9 +128,7 @@ exports.register_vendor =(req,res,next)=>{
                        _id: new mongoose.Types.ObjectId(),
                        username:req.body.username,
                        email:req.body.email,
-                       password:hash,
-                       dateCreated:Date.now(),
-                       dateUpdated:Date.now()
+                       password:hash
                    });
 
                    vendorRegister.save()
@@ -325,7 +323,6 @@ exports.get_vendor_log=(req,res,next)=>{
 
 exports.get_allVendor_locations =(req,res,next)=>{
     VendorLocation.find({})
-    .select()
     .then(result =>{
         res.status(200).json({message:"Success Load Vendor Locations",success:"1",result:result})
     })
@@ -334,7 +331,7 @@ exports.get_allVendor_locations =(req,res,next)=>{
     })
 };
 
-exports.get_vendor_locations_byId =(req,res,next)=>{
+exports.get_detail_locations_byId =(req,res,next)=>{
     VendorLocation.find({vendor:req.params.idLocation})
     .then(result =>{
         if(result < 1){
@@ -347,4 +344,80 @@ exports.get_vendor_locations_byId =(req,res,next)=>{
         console.log(error);
         res.status(500).json({message:"Failed Load Data",success:"0",msg:error});
     });
+};
+
+exports.update_vendor=(req,res,next)=>{
+    Vendor.updateOne(
+        {
+            _id:req.body.idVendor
+        },{
+            $set:{username:req.body.username,password:req.body.password}
+        })
+    .then(resultUpdate =>{
+        res.status(200).json({message:"Success Update Vendors Account",success:"1",result:true})
+    })
+    .catch(errorUpdate =>{
+        res.status(500).json({message:"Failed Update Vendor Account",success:"0",msg:errorUpdate})
+    });
+};
+exports.vendor_data_update=(req,res,next)=>{
+    VendorData.updateOne(
+        {
+            vendor:req.body.idVendor
+        },{
+            $set:{
+                firstName:req.body.firstName,
+                lastName:req.body.lastName,
+                birth:req.body.birth,
+                phone:req.body.phone,
+                photo:req.file.path
+            }
+        })
+    .then(result =>{
+        res.status(200).json({message:"Success Update Vendors Data",success:"1",result:true})
+    })
+    .catch(errorUpdate =>{
+        res.status(500).json({message:"Failed Update Vendor Data",success:"0",msg:errorUpdate})
+    })
+};
+exports.update_vendor_region=(req,res,next)=>{
+    VendorRegion.updateOne(
+        {
+            vendor:req.body.idVendor
+        },{
+            $set:{
+                administrative_area_level_1: req.body.provinsi,
+                administrative_area_level_2: req.body.kota,
+                administrative_area_level_3: req.body.kecamatan,
+                administrative_area_level_4: req.body.desa,
+            }
+        })
+    .then(result =>{
+        res.status(200).json({message:"Success Update Vendors Region",success:"1",result:true})
+    })
+    .catch(errorUpdate =>{
+        res.status(500).json({message:"Failed Update Vendor Region",success:"0",msg:errorUpdate})
+    })
+};
+exports.update_location =(req,res,next)=>{
+    VendorLocation.updateOne(
+        {
+            vendor:req.body.idVendor
+        },{
+            $set:{
+                namaToko:req.body.namaToko,
+                photoToko:req.file.path,
+                hours:req.body.hours,
+                address:req.body.alamat,
+                postalCode:req.body.kodepos,
+                lat:req.body.lat,
+                lng:req.body.lng
+            }
+        })
+    .then(result=>{
+        res.status(200).json({message:"Success Update Vendors Location",success:"1",result:true})
+    })
+    .catch(errorUpdate=>{
+        res.status(500).json({message:"Failed Update Vendor Region",success:"0",msg:errorUpdate})
+    })
 };
