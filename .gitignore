@@ -1,3 +1,4 @@
 node_modules/
 toko_upload/
 vendor_upload/
+nodemon.json

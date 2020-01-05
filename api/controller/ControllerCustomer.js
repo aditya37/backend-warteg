@@ -185,7 +185,7 @@ exports.add_customer_region =(req,res,next)=>{
       if(result){
         res.status(201).json({message:"Successfully Insert User Region",success:"1",customerData:result});
       }else{
-        res.status(404).json({message:"Failed Insert User Region",succes:"0",customerData:[]});
+        res.status(404).json({message:"Failed Insert User Region",success:"0",customerData:[]});
       }
   
     })

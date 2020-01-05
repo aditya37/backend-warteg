@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt'); // enkripsi/dekripsi password
+const jwt      = require('jsonwebtoken');
+const randToken= require('rand-token');
 
 // Import or include model database
 const Vendor       =  require('../model/vendor/modelvendor');
@@ -51,7 +53,7 @@ exports.get_vendors  =(req,res,next)=>{
         if(result){
             res.status(200).json({message:"Successfully Load Data Vendors",success:"1",count: result.length,vendor_datas:result})
         }else{
-            res.status(404).json({message:"Customer Datas Not Found",status:"0",dataCustomer:[]});
+            res.status(404).json({message:"Customer Datas Not Found",success:"0",result:[]});
         }
     })
     .catch(error =>{
@@ -103,10 +105,9 @@ exports.get_vendorid =(req,res,next)=>{
     ])
     .then(result =>{
         if(result){
-            console.log(result);
-            res.status(200).json({message:"Successfully Load Data",success:"1",vendorData:result});
+            res.status(200).json({message:"Successfully Load Data",success:"1",result:result});
         }else{
-            res.status(404).json({message:"Customer ID Not Found",success:"0",vendorData:[]});
+            res.status(404).json({message:"Customer ID Not Found",success:"0"});
         }
     })
     .catch(error =>{
@@ -128,13 +129,14 @@ exports.register_vendor =(req,res,next)=>{
                        _id: new mongoose.Types.ObjectId(),
                        username:req.body.username,
                        email:req.body.email,
-                       password:hash
+                       password:hash,
+                       refresh_token:randToken.uid(256)
                    });
 
                    vendorRegister.save()
                    .then(result =>{
                        console.log(result);
-                       res.status(201).json({message:"Successfuly Registered Vendor",success:"1",vendorData:result});
+                       res.status(201).json({message:"Successfuly Registered Vendor",success:"1",result:result});
                    })
                    .catch(error =>{
                        console.log(error);
@@ -167,7 +169,7 @@ exports.add_vendor_data=(req,res,next)=>{
             vendorData.save()
             .then(result =>{
                 if(result){
-                    res.status(201).json({message:"Successfully Add Vendor Data",success:"1",vendorData:result});
+                    res.status(201).json({message:"Successfully Add Vendor Data",success:"1",result:result});
                 }else{
                     res.status(404).json({message:"Failed Add Vendor Data",success:"0",vendorData:result});
                 }
@@ -201,9 +203,9 @@ exports.add_vendor_region=(req,res,next)=>{
             vendorRegiondata.save()
             .then(result =>{
                 if(result){
-                    res.status(201).json({message:"Successfully Add Vendor Region",success:"1",vendorData:result});
+                    res.status(201).json({message:"Successfully Add Vendor Region",success:"1",result:result});
                 }else{
-                    res.status(404).json({message:"Failed Insert Vendor Region",succes:"0",vendorData:[]});
+                    res.status(404).json({message:"Failed Insert Vendor Region",succes:"0"});
                 }
             })
             .catch(error=>{
@@ -237,9 +239,9 @@ exports.add_vendor_location=(req,res,next)=>{
              vendorlocation.save()
              .then(result =>{
                  if(result){
-                    res.status(201).json({message:"Successfully Add Vendor Location",success:"1",vendorData:result});
+                    res.status(201).json({message:"Successfully Add Vendor Location",success:"1",result:result});
                  }else{
-                    res.status(404).json({message:"Failed Insert Vendor Location",succes:"0",vendorData:[]});
+                    res.status(404).json({message:"Failed Insert Vendor Location",succes:"0"});
                  }
              })
              .catch(error =>{
@@ -265,7 +267,7 @@ exports.delete_vendor =(req,res,next)=>{
     })
     .catch(error =>{
         console.log(error)
-        res.status(500).json({status:"0",message:"Sorry!!",err:error});
+        res.status(500).json({success:"0",message:"Sorry!!",err:error});
     })
 };
 exports.vendor_login =(req,res,next)=>{
@@ -273,7 +275,7 @@ exports.vendor_login =(req,res,next)=>{
     .then(vendor =>{
   
        if(vendor.length < 1){
-         return res.status(401).json({message:"Gagal"});
+         return res.status(401).json({message:"Failed!! Username not registered",success:"0"});
        }
   
        bcrypt.compare(req.body.password,vendor[0].password,(err,result)=>{
@@ -282,15 +284,29 @@ exports.vendor_login =(req,res,next)=>{
          }
   
          if(result){
-           res.status(200).json({message:"Login Sucessfully",vendor:vendor});
+            const token = jwt.sign(
+                {
+                    idVendor:vendor[0]._id,
+                    username:vendor[0].username,
+                    email:vendor[0].email
+                },process.env.JWT_KEY,
+                {
+                    expiresIn: "1h"
+                });
+            const data ={
+               idVendor:vendor[0]._id,
+               username:vendor[0].username,
+               email:vendor[0].email
+            };
+           res.status(200).json({message:"Login Sucessfully",success:"1",token:token,refresh_token:vendor[0].refresh_token,result:data});
          }else{
-           res.status(401).json({message:"Auht failed"});
+           res.status(401).json({message:"Username or password wrong",success:"0"});
          }
   
        })
      })
     .catch(error =>{
-         console.log(error);
+         res.status(500).json({message:"Opss!!","success":"0",msg:error});
      })
 };
 exports.vendor_log   =(req,res,next)=>{
@@ -304,7 +320,7 @@ exports.vendor_log   =(req,res,next)=>{
   
     vendorlog.save()
     .then(result =>{
-        res.status(201).json({message:"Successfully Save Authentication Vendor Log",success:"1",vendorlog:result});
+        res.status(201).json({message:"Successfully Save Authentication Vendor Log",success:"1",result:result});
     })
     .catch(error=>{
       console.log(error)
@@ -314,21 +330,22 @@ exports.vendor_log   =(req,res,next)=>{
 exports.get_vendor_log=(req,res,next)=>{
     VendorLog.find({vendor:req.params.id})
     .then(result =>{
-        res.status(200).json({message:"Success Load Log data",status:"1",result:result});
+        res.status(200).json({message:"Success Load Log data",success:"1",result:result});
     })
     .catch(error =>{
         console.log(error);
-        res.status(500).json({message:"Failed Load Log Data",status:"0",msg: error});
+        res.status(500).json({message:"Failed Load Log Data",success:"0",msg: error});
     });
 };
 
+// PR
 exports.get_allVendor_locations =(req,res,next)=>{
     VendorLocation.find({})
     .then(result =>{
         res.status(200).json({message:"Success Load Vendor Locations",success:"1",result:result})
     })
     .catch(error =>{
-        res.status(500).json({message:"Failed Load Location",status:"0",msg:error});
+        res.status(500).json({message:"Failed Load Location",success:"0",msg:error});
     })
 };
 
@@ -336,9 +353,9 @@ exports.get_detail_locations_byId =(req,res,next)=>{
     VendorLocation.find({vendor:req.params.idLocation})
     .then(result =>{
         if(result < 1){
-            return res.status(409).json({message:"False",status:"0",result:result});
+            return res.status(409).json({message:"False",success:"0",result:result});
         }else{
-            res.status(200).json({message:"Success Load Locations",status:"1",result:result});
+            res.status(200).json({message:"Success Load Locations",success:"1",result:result});
         }
     })
     .catch(error =>{
@@ -420,5 +437,25 @@ exports.update_location =(req,res,next)=>{
     })
     .catch(errorUpdate=>{
         res.status(500).json({message:"Failed Update Vendor Region",success:"0",msg:errorUpdate})
+    })
+};
+exports.refresh_auth=(req,res,next)=>{
+    Vendor.find({refresh_token:req.body.refresh_token})
+    .then(vendor=>{
+        if(vendor.length < 1){
+            return res.status(401).json({message:"Refresh Token Wrong",success:"0"});
+        }else{
+         const token = jwt.sign({
+             idVendor:vendor[0]._id,
+             username:vendor[0].username,
+             email:vendor[0].email
+            },process.env.JWT_KEY,{
+                expiresIn: "1h"
+            });
+            return res.status(200).json({message:"Success Refresh Token",success:"1",token:token});
+        }
+    })
+    .catch(error=>{
+        res.status(500).json({message:"Failed Get Refresh Token",success:"0",msg:error})
     })
 };

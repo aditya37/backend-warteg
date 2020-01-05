@@ -9,7 +9,8 @@ const vendorSchema = mongoose.Schema({
     _id: mongoose.Types.ObjectId,
     username:String,
     password:String,
-    email:String
+    email:String,
+    refresh_token:String
 },{versionKey:false,timestamps:true});
 
 // untuk menghapus data yang berelasi atau cascade

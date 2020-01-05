@@ -2,14 +2,18 @@ const express = require('express');
 const router  = express.Router();
 
 const ControllerVendor = require('../../controller/ControllerVendor')
+const jwtAuth = require('../../middleware/jwtauth');
 
 // Auth Vendor
 router.post('/',ControllerVendor.vendor_login);
   
-// Vendor Log
-router.post('/log',ControllerVendor.vendor_log);
+// Refresh token if jwt has expired
+router.post('/refresh',ControllerVendor.refresh_auth);
+
+// Save Vendor Log
+router.post('/log',jwtAuth,ControllerVendor.vendor_log);
 
 // Get Vendor Log
-router.get('/log/:id',ControllerVendor.get_vendor_log);
+router.get('/log/:id',jwtAuth,ControllerVendor.get_vendor_log);
 
 module.exports = router;
