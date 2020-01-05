@@ -2,6 +2,7 @@ const express  = require('express');
 const router   = express.Router();
 
 const ControllerVendor = require('../../controller/ControllerVendor');
+const jwtAuth = require('../../middleware/jwtauth');
 
 // add package or module multer for upload image
 const multer  = require('multer');
@@ -58,10 +59,10 @@ const uploadToko = multer({
 /**
  * Get Methodes
  */
-router.get('/',ControllerVendor.get_vendors);
-router.get('/data/:id',ControllerVendor.get_vendorid);
-router.get('/locations',ControllerVendor.get_allVendor_locations);
-router.get('/locations/:idLocation',ControllerVendor.get_detail_locations_byId);
+router.get('/',jwtAuth,ControllerVendor.get_vendors);
+router.get('/data/:id',jwtAuth,ControllerVendor.get_vendorid);
+router.get('/locations',jwtAuth,ControllerVendor.get_allVendor_locations);
+router.get('/locations/:idLocation',jwtAuth,ControllerVendor.get_detail_locations_byId);
 
 /**
  *  Post data
@@ -73,13 +74,13 @@ router.get('/locations/:idLocation',ControllerVendor.get_detail_locations_byId);
 /**
  * Delete Vendor 
  */
-router.delete('/:id',ControllerVendor.delete_vendor);
+router.delete('/:id',jwtAuth,ControllerVendor.delete_vendor);
 /**
  * Update Vendor
  */
-router.patch('/',ControllerVendor.update_vendor);
-router.patch('/data',uploadVendor.single("photo"),ControllerVendor.vendor_data_update);
-router.patch('/region',ControllerVendor.update_vendor_region);
-router.patch('/location',uploadToko.single("photoToko"),ControllerVendor.update_location);
+router.patch('/',jwtAuth,ControllerVendor.update_vendor);
+router.patch('/data',jwtAuth,uploadVendor.single("photo"),ControllerVendor.vendor_data_update);
+router.patch('/region',jwtAuth,ControllerVendor.update_vendor_region);
+router.patch('/location',jwtAuth,uploadToko.single("photoToko"),ControllerVendor.update_location);
 
 module.exports = router;
