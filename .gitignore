@@ -1,4 +1,5 @@
 node_modules/
 toko_upload/
 vendor_upload/
+upload_product/
 nodemon.json

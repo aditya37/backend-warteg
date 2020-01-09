@@ -14,6 +14,6 @@ const schemaProducts = moongose.Schema({
         Type:moongose.Schema.Types.ObjectId,
         ref:"vendor"
     }
-},{versionKey:false});
+},{versionKey:false,timestamps:true});
 
 module.exports = moongose.model("vendorProduct",schemaProducts);

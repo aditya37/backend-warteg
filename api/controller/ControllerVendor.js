@@ -440,22 +440,27 @@ exports.update_location =(req,res,next)=>{
     })
 };
 exports.refresh_auth=(req,res,next)=>{
-    Vendor.find({refresh_token:req.body.refresh_token})
-    .then(vendor=>{
-        if(vendor.length < 1){
-            return res.status(401).json({message:"Refresh Token Wrong",success:"0"});
-        }else{
-         const token = jwt.sign({
-             idVendor:vendor[0]._id,
-             username:vendor[0].username,
-             email:vendor[0].email
-            },process.env.JWT_KEY,{
-                expiresIn: "1h"
-            });
-            return res.status(200).json({message:"Success Refresh Token",success:"1",token:token});
-        }
-    })
-    .catch(error=>{
-        res.status(500).json({message:"Failed Get Refresh Token",success:"0",msg:error})
-    })
+    if(Object.keys(req.body).length == 0){
+        return res.status(200).json({message:"Ooop!! Please filled the filed",success:"1"});
+    }else{
+        Vendor.find({refresh_token:req.body.refresh_token})
+        .then(vendor=>{
+            if(vendor.length < 1){
+                return res.status(401).json({message:"Refresh Token Wrong",success:"0"});
+            }else{
+                const token = jwt.sign({
+                    idVendor:vendor[0]._id,
+                    username:vendor[0].username,
+                    email:vendor[0].email
+                },process.env.JWT_KEY,{
+                    expiresIn: "1h"
+                });
+                return res.status(200).json({message:"Success Refresh Token",success:"1",token:token});
+            }
+        })
+        .catch(error=>{
+            console.log(error);
+            res.status(500).json({message:"Failed Get Refresh Token",success:"0",msg:error})
+        })
+    }
 };

@@ -7,10 +7,10 @@ const vendorLocation = require('./modelVendorLocation');
 
 const vendorSchema = mongoose.Schema({
     _id: mongoose.Types.ObjectId,
-    username:String,
-    password:String,
-    email:String,
-    refresh_token:String
+    username:{type:String,required:true},
+    password:{type:String,required:true},
+    email:{type:String,required:true},
+    refresh_token:{type :String,required:true}
 },{versionKey:false,timestamps:true});
 
 // untuk menghapus data yang berelasi atau cascade

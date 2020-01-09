@@ -44,11 +44,10 @@ app.use('/upload',express.static('./vendor_upload'));
 app.use('/upload/toko',express.static('./toko_upload'));
 
 //body parser
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-// upload route
-app.use(bodyParser.json());
 
 // CORS - Corss - Origin - Resource - Sharing
 //  https://developer.mozilla.org/id/docs/Web/HTTP/CORS
