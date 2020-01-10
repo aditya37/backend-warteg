@@ -11,8 +11,8 @@ const schemaProducts = moongose.Schema({
     stok:String,
     deskripsi:String,
     vendor:{
-        Type:moongose.Schema.Types.ObjectId,
-        ref:"vendor"
+        type:moongose.Schema.Types.ObjectId,
+        ref:"vendors"
     }
 },{versionKey:false,timestamps:true});
 

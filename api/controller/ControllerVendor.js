@@ -455,7 +455,12 @@ exports.refresh_auth=(req,res,next)=>{
                 },process.env.JWT_KEY,{
                     expiresIn: "1h"
                 });
-                return res.status(200).json({message:"Success Refresh Token",success:"1",token:token});
+                const data ={
+                    idVendor:vendor[0]._id,
+                    username:vendor[0].username,
+                    email:vendor[0].email
+                 };
+                 res.status(200).json({message:"Login Sucessfully",success:"1",result:data,token:token,refresh_token:vendor[0].refresh_token});
             }
         })
         .catch(error=>{
