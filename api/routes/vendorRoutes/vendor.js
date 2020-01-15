@@ -35,7 +35,7 @@ const storageToko = multer.diskStorage({
 })
 // filter uplod file
 const fileFilter = (req,file,cb) =>{
-    if(file.mimetype == 'image/jpeg' || file.mimetype == 'image/png'){
+    if(file.mimetype == 'image/jpg' || file.mimetype == 'image/png'){
         cb(null,true);
     }else{
         cb(null,false);        
@@ -68,7 +68,7 @@ router.get('/locations/:idLocation',jwtAuth,ControllerVendor.get_detail_location
  *  Post data
  */
  router.post('/',ControllerVendor.register_vendor);
- router.post('/data',uploadVendor.single("photo"),ControllerVendor.add_vendor_data);
+ router.post('/data',ControllerVendor.add_vendor_data);
  router.post('/region',ControllerVendor.add_vendor_region);
  router.post('/location',uploadToko.single("photoToko"),ControllerVendor.add_vendor_location);
 /**

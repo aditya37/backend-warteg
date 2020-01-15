@@ -11,7 +11,7 @@ router.post('/',ControllerVendor.vendor_login);
 router.post('/refresh',ControllerVendor.refresh_auth);
 
 // Save Vendor Log
-router.post('/log',jwtAuth,ControllerVendor.vendor_log);
+router.post('/log',ControllerVendor.vendor_log);
 
 // Get Vendor Log
 router.get('/log/:id',jwtAuth,ControllerVendor.get_vendor_log);

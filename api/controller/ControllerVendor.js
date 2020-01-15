@@ -280,7 +280,7 @@ exports.vendor_login =(req,res,next)=>{
   
        bcrypt.compare(req.body.password,vendor[0].password,(err,result)=>{
          if(err){
-           return res.status(401).json({message:"Auth Failed"});
+           return res.status(401).json({success:"0",message:"Auth Failed"});
          }
   
          if(result){
