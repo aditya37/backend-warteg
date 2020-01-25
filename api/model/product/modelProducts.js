@@ -2,14 +2,16 @@ const moongose = require('mongoose');
 
 const schemaProducts = moongose.Schema({
     _id: moongose.Types.ObjectId,
-    namaProduk:String,
-    harga:String,
-    photoProduk:String,
-    kategoriProduk:[{
-        kategori:String
+    productName:String,
+    description:String,
+    productDetails:[{
+        price:String,
+        qty:String,
+        productCategory_1:String,
+        productCategory_2:String,
+        productCategory_3:String
     }],
-    stok:String,
-    deskripsi:String,
+    productPhoto:String,  
     vendor:{
         type:moongose.Schema.Types.ObjectId,
         ref:"vendors"

@@ -19,15 +19,18 @@ const multer  = require('multer');
 // declare storage
 const storageVendor = multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,'./vendor_upload');
+        cb(null,'./vendor_upload/');
     },
     filename:function(req,file,cb) {
-        cb(null,new Date().toISOString()+file.originalname);
+        const now = new Date().toISOString(); 
+        const date = now.replace(/:/g, '-'); 
+        cb(null, date + file.originalname);
+        //cb(null,new Date().toISOString()+file.originalname);
     }
 })
 const storageToko = multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,'./toko_upload');
+        cb(null,'./toko_upload/');
     },
     filename:function(req,file,cb) {
         cb(null,new Date().toISOString()+file.originalname);
@@ -35,7 +38,7 @@ const storageToko = multer.diskStorage({
 })
 // filter uplod file
 const fileFilter = (req,file,cb) =>{
-    if(file.mimetype == 'image/jpg' || file.mimetype == 'image/png'){
+    if(file.mimetype == 'image/jpeg' || file.mimetype == 'image/png'){
         cb(null,true);
     }else{
         cb(null,false);        
@@ -62,13 +65,13 @@ const uploadToko = multer({
 router.get('/',jwtAuth,ControllerVendor.get_vendors);
 router.get('/data/:id',jwtAuth,ControllerVendor.get_vendorid);
 router.get('/locations',jwtAuth,ControllerVendor.get_allVendor_locations);
-router.get('/locations/:idLocation',jwtAuth,ControllerVendor.get_detail_locations_byId);
+router.get('/locations/:idVendor',jwtAuth,ControllerVendor.get_detail_locations_byId);
 
 /**
  *  Post data
  */
  router.post('/',ControllerVendor.register_vendor);
- router.post('/data',ControllerVendor.add_vendor_data);
+ router.post('/data',uploadVendor.single("photo"),ControllerVendor.add_vendor_data);
  router.post('/region',ControllerVendor.add_vendor_region);
  router.post('/location',uploadToko.single("photoToko"),ControllerVendor.add_vendor_location);
 /**

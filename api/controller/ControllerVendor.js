@@ -219,6 +219,7 @@ exports.add_vendor_region=(req,res,next)=>{
     })
 };
 exports.add_vendor_location=(req,res,next)=>{
+    //console.log(req.body);
     VendorLocation.find({vendor:req.body.idVendor})
      .then(result =>{
          if(result.length >= 1){
@@ -338,7 +339,7 @@ exports.get_vendor_log=(req,res,next)=>{
     });
 };
 
-// PR
+// PR 
 exports.get_allVendor_locations =(req,res,next)=>{
     VendorLocation.find({})
     .then(result =>{
@@ -348,9 +349,38 @@ exports.get_allVendor_locations =(req,res,next)=>{
         res.status(500).json({message:"Failed Load Location",success:"0",msg:error});
     })
 };
-
+// *PR* menambahkan product yang dijual di lokasi tersebut
 exports.get_detail_locations_byId =(req,res,next)=>{
-    VendorLocation.find({vendor:req.params.idLocation})
+    Vendor.aggregate([
+        {
+            "$match": { "_id": mongoose.Types.ObjectId(req.params.idVendor) } 
+        },
+        {
+            $lookup:{
+                from:"vendorlocations",
+                foreignField:"vendor",
+                localField:"_id",
+                as:"vendor_locations"
+            }
+        },{$unwind:"$vendor_locations"},
+        {
+            $lookup:{
+                from:"vendorproducts",
+                foreignField:"vendor",
+                localField:"_id",
+                as:"vendor_products"
+            }
+        },
+        {
+            $project:{
+                "vendor_products.productDetails._id":0,
+                "vendor_products.vendor":0,
+                "vendor_locations.vendor":0,
+                "vendor_locations._id":0,
+                "vendor_locations.hours._id":0
+            }
+        }
+    ])
     .then(result =>{
         if(result < 1){
             return res.status(409).json({message:"False",success:"0",result:result});
