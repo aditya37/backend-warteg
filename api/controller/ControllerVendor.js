@@ -421,7 +421,9 @@ exports.get_detail_locations_byId =(req,res,next)=>{
 exports.update_vendor=(req,res,next)=>{
     Vendor.find({_id:req.body.idVendor})
     .then(result =>{
-        if(result.length >= 1){
+        if(result.length < 1){
+            return res.status(404).json({message:"Username or ID not exists",success:"0"})
+        }else{
             bcrypt.hash(req.body.password,10,(err,hash)=>{
                 if(err){
                     res.status(500).json({message:err,success:"0"});
@@ -443,8 +445,6 @@ exports.update_vendor=(req,res,next)=>{
                     })
                 }
             });
-        }else{
-            return res.status(409).json({message:"Username or ID not exists",success:"0"})
         }
     })
     .catch(errorUpdate =>{
