@@ -2,6 +2,7 @@ const moongose = require('mongoose');
 
 const schemaProducts = moongose.Schema({
     _id: moongose.Types.ObjectId,
+    idProduct:{type:String,require:true},
     productName:String,
     description:String,
     productDetails:[{

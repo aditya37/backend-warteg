@@ -1,41 +1,69 @@
 const mongoose      = require('mongoose');
+const randToken     = require('rand-token');
 const vendorProduct = require('../model/product/modelProducts');
 const vendor        = require('../model/vendor/modelvendor');
 
 exports.getAll_product   =(req,res,next)=>{
     vendor.aggregate([
         {
-           $unwind:"$_id"
-        },
-        {
             $lookup:{
                 from:"vendorproducts",
                 localField:"_id",
                 foreignField:"vendor",
-                as:"x"
+                as:"vendor_products"
                 }
+        },
+        {
+            $project:{
+                "vendor_products.productDetails._id":0,
+                "vendor_products.vendor":0,
+                "vendor_products._id":0,
+                "dateCreated":0,
+                "password": 0,
+                "dateCreated":0,
+                "dateUpdated":0,
+                "updatedAt":0
+            }
         }
     ])
     .then(result =>{
-        res.status(200).json({result:result});
+        if(result){
+            res.status(200).json({message:"Success Load Products",success:"1",result:result});
+        }else{
+            res.status(404).json({message:"Products Not Found",success:"0"});
+        }
     })
-    .catch(error =>{});
+    .catch(error =>{
+        res.status(500).json({message:"Upsss! Sorry",success:"0",msg:error});
+    });
 };
-
-exports.get_vendorProduct=(req,res,next)=>{};
-exports.get_detailProduct=(req,res,next)=>{};
+exports.get_detailProduct=(req,res,next)=>{
+    vendorProduct
+    .find({idProduct:req.params.idProduct})
+    .then(result =>{
+        if(result.length >= 1){
+            res.status(200).json({message:"Success load detail products",success:"1",result:result})
+        }else{
+          return res.status(404).json({message:"Product Not Found",success:"0"});
+        }
+    })
+    .catch(error =>{
+        res.status(500).json({message:"Failed Load Products Detail",success:"0",msg:error});
+    })
+};
 exports.update_product   =(req,res,next)=>{};
 exports.delete_product   =(req,res,next)=>{};
 exports.add_product      =(req,res,next)=>{
     if(Object.keys(req.body).length == 0){
-        return res.status(200).json({message:"Ooop!! Please filled the filed",success:"0"});
+        return res.status(409).json({message:"Ooop!! Please fill the filed",success:"0"});
     }else{
         const addProduct = new vendorProduct({
             _id: new mongoose.Types.ObjectId,
+            idProduct:"PRD-"+randToken.uid(13),
             productName:req.body.productName,
             description:req.body.description,
             productDetails:req.body.productDetails,
-            productPhoto:req.body.productPhoto,
+            productPhoto:req.file.path,
             vendor:req.body.idVendor
         });
         addProduct.save()

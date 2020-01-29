@@ -338,12 +338,31 @@ exports.get_vendor_log=(req,res,next)=>{
         res.status(500).json({message:"Failed Load Log Data",success:"0",msg: error});
     });
 };
-
 // PR 
 exports.get_allVendor_locations =(req,res,next)=>{
-    VendorLocation.find({})
+    Vendor.aggregate([
+        {
+            $lookup:{
+                from:"vendorlocations",
+                localField:"_id",
+                foreignField:"vendor",
+                as:"vendor_locations"
+            }   
+        },{$unwind:"$vendor_locations"},
+        {
+            $project:{
+                "password": 0,
+                "dateCreated":0,
+                "dateUpdated":0,
+                "updatedAt":0,
+                "createdAt":0,
+                "refresh_token":0,
+                "vendor_locations.vendor":0
+            }
+        }
+    ])
     .then(result =>{
-        res.status(200).json({message:"Success Load Vendor Locations",success:"1",result:result})
+        res.status(200).json({message:"Success Load Vendor Locations",success:"1",count:result.length,result:result})
     })
     .catch(error =>{
         res.status(500).json({message:"Failed Load Location",success:"0",msg:error});
@@ -377,15 +396,21 @@ exports.get_detail_locations_byId =(req,res,next)=>{
                 "vendor_products.vendor":0,
                 "vendor_locations.vendor":0,
                 "vendor_locations._id":0,
-                "vendor_locations.hours._id":0
+                "vendor_locations.hours._id":0,
+                "vendor_products._id":0
             }
         }
     ])
     .then(result =>{
-        if(result < 1){
-            return res.status(409).json({message:"False",success:"0",result:result});
+        if(result.length < 1){
+            return res.status(404).json({message:"Oooopss!!!, Data Empty",success:"0"});
         }else{
-            res.status(200).json({message:"Success Load Locations",success:"1",result:result});
+            if(result[0].vendor_products <= 1){
+                console.log(result);
+                return res.status(404).json({message:"Empty Data, please fill your product",success:"0"});
+            }else{
+                res.status(200).json({message:"Success Load Detail Locations",success:"1",result:result});
+            }
         }
     })
     .catch(error =>{
@@ -393,19 +418,38 @@ exports.get_detail_locations_byId =(req,res,next)=>{
         res.status(500).json({message:"Failed Load Data",success:"0",msg:error});
     });
 };
-
 exports.update_vendor=(req,res,next)=>{
-    Vendor.updateOne(
-        {
-            _id:req.body.idVendor
-        },{
-            $set:{username:req.body.username,password:req.body.password}
-        })
-    .then(resultUpdate =>{
-        res.status(200).json({message:"Success Update Vendors Account",success:"1",result:true})
+    Vendor.find({_id:req.body.idVendor})
+    .then(result =>{
+        if(result.length >= 1){
+            bcrypt.hash(req.body.password,10,(err,hash)=>{
+                if(err){
+                    res.status(500).json({message:err,success:"0"});
+                }else{
+                    Vendor.updateOne({
+                        _id:req.body.idVendor
+                    },{
+                        $set:{
+                            username:req.body.username,
+                            password:hash,
+                            email:req.body.email,
+                        }
+                    })
+                    .then(resultUpdate =>{
+                        res.status(200).json({message:"Success Update Vendors Account",success:"1"})
+                    })
+                    .catch(errorUpdate =>{
+                        res.status(500).json({message:"Failed Update Vendor Account",success:"0"})
+                    })
+                }
+            });
+        }else{
+            return res.status(409).json({message:"Username or ID not exists",success:"0"})
+        }
     })
     .catch(errorUpdate =>{
-        res.status(500).json({message:"Failed Update Vendor Account",success:"0",msg:errorUpdate})
+        console.log(errorUpdate);
+        res.status(500).json({message:"Failed Update Vendor Account",success:"0"})
     });
 };
 exports.vendor_data_update=(req,res,next)=>{
@@ -422,7 +466,7 @@ exports.vendor_data_update=(req,res,next)=>{
             }
         })
     .then(result =>{
-        res.status(200).json({message:"Success Update Vendors Data",success:"1",result:true})
+        res.status(200).json({message:"Success Update Vendors Data",success:"1"})
     })
     .catch(errorUpdate =>{
         res.status(500).json({message:"Failed Update Vendor Data",success:"0",msg:errorUpdate})
@@ -471,7 +515,7 @@ exports.update_location =(req,res,next)=>{
 };
 exports.refresh_auth=(req,res,next)=>{
     if(Object.keys(req.body).length == 0){
-        return res.status(200).json({message:"Ooop!! Please filled the filed",success:"1"});
+        return res.status(409).json({message:"Ooop!! Please filled the filed",success:"1"});
     }else{
         Vendor.find({refresh_token:req.body.refresh_token})
         .then(vendor=>{
