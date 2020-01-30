@@ -28,11 +28,11 @@ const uplodProduct = multer({
 const jwtAuth = require('../../middleware/jwtauth');
 const ControllerProduct = require('../../controller/ControllerProduct');
 
-router.get('/',ControllerProduct.getAll_product);
-router.get('/detail/:idProduct',ControllerProduct.get_detailProduct);
+router.get('/',jwtAuth,ControllerProduct.getAll_product);
+router.get('/detail/:idProduct',jwtAuth,ControllerProduct.get_detailProduct);
 
-router.post('/',uplodProduct.single("productPhoto"),ControllerProduct.add_product);
-router.patch('/',ControllerProduct.update_product);
-router.delete('/',ControllerProduct.delete_product);
+router.post('/',jwtAuth,uplodProduct.single("productPhoto"),ControllerProduct.add_product);
+router.patch('/',jwtAuth,uplodProduct.single("productPhoto"),ControllerProduct.update_product);
+router.delete('/',jwtAuth,ControllerProduct.delete_product);
 
 module.exports = router;

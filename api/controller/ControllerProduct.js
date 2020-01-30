@@ -51,7 +51,37 @@ exports.get_detailProduct=(req,res,next)=>{
         res.status(500).json({message:"Failed Load Products Detail",success:"0",msg:error});
     })
 };
-exports.update_product   =(req,res,next)=>{};
+exports.update_product   =(req,res,next)=>{
+    vendorProduct.find({idProduct:req.body.idProduct})
+    .then(result =>{
+        if(result.length < 1){
+            
+            return res.status(404).json({message:"Products not exists",success:"0",result:result})
+        }else{
+            vendorProduct.updateOne({
+                idProduct:req.body.idProduct
+            },{
+                $set:{
+                    productName:req.body.productName,
+                    description:req.body.description,
+                    productDetails:req.body.productDetails,
+                    productPhoto:req.file.path,
+                    vendor:req.body.idVendor
+                }
+            })
+            .then(resultUpdte  =>{
+                res.status(200).json({message:"Success Update Vendors Products",success:"1"})
+            })
+            .catch(errorUpdate =>{
+                res.status(500).json({message:"Failed Update Vendor Products",success:"0"})
+            })
+        }
+    })
+    .catch(error=>{
+        console.log(error);
+        res.status(500).json({message:"Failed Update Vendor Products",success:"0"})
+    })
+};
 exports.delete_product   =(req,res,next)=>{};
 exports.add_product      =(req,res,next)=>{
     if(Object.keys(req.body).length == 0){
