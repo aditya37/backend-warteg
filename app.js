@@ -42,6 +42,7 @@ app.use(log('combined'));
 // add route for show image
 app.use('/upload',express.static('./vendor_upload'));
 app.use('/upload/toko',express.static('./toko_upload'));
+app.use('/upload/product',express.static('./upload_product'))
 
 //body parser
 app.use(bodyParser.json());
