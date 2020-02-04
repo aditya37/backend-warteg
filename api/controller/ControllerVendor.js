@@ -515,7 +515,7 @@ exports.update_location =(req,res,next)=>{
 };
 exports.refresh_auth=(req,res,next)=>{
     if(Object.keys(req.body).length == 0){
-        return res.status(409).json({message:"Ooop!! Please filled the filed",success:"1"});
+        return res.status(409).json({message:"Ooop!! Please fill the filed",success:"1"});
     }else{
         Vendor.find({refresh_token:req.body.refresh_token})
         .then(vendor=>{

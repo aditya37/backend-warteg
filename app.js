@@ -24,6 +24,7 @@ const authVendor     = require('./api/routes/authRoutes/authVendor');
 const productRoutes  = require('./api/routes/productRoutes/product');
 const customerRoutes = require('./api/routes/customerRoutes/customer');
 const vendoRoutes    = require('./api/routes/vendorRoutes/vendor')
+const featureRoutes  = require('./api/routes/featureRoutes/features');
 
 // import route for regions at indonesia
 const regionRoutes   = require('./api/routes/regionRoutes/regions');
@@ -42,7 +43,8 @@ app.use(log('combined'));
 // add route for show image
 app.use('/upload',express.static('./vendor_upload'));
 app.use('/upload/toko',express.static('./toko_upload'));
-app.use('/upload/product',express.static('./upload_product'))
+app.use('/upload/product',express.static('./upload_product'));
+app.use('/upload/content',express.static('./content_upload'));
 
 //body parser
 app.use(bodyParser.json());
@@ -74,7 +76,7 @@ app.use((req,res,next)=>{
 app.use('/products',productRoutes);
 app.use('/vendors',vendoRoutes);
 app.use('/customers',customerRoutes);
-
+app.use('/features',featureRoutes);
 
 // Declare Authentication route
 app.use('/auth/customer/',authCustomer);
