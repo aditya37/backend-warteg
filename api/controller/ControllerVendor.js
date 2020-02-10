@@ -116,7 +116,13 @@ exports.get_vendorid =(req,res,next)=>{
     })
 };
 exports.register_vendor =(req,res,next)=>{
-    Vendor.find({username:req.body.username}).exec()
+    // validate email or username
+    Vendor.find({
+        $or:[
+            {"username":req.body.username},
+            {'email':req.body.email}
+        ]
+    }).exec()
     .then(result =>{
         if(result.length >= 1){
             return res.status(409).json({message:"Username exists",success:"0"})
@@ -272,9 +278,14 @@ exports.delete_vendor =(req,res,next)=>{
     })
 };
 exports.vendor_login =(req,res,next)=>{
-    Vendor.find({username:req.body.username}).exec()
+    Vendor.find({
+        $or:[
+            {"username":req.body.username},
+            {"email":req.body.email}
+        ]
+    })
     .then(vendor =>{
-  
+
        if(vendor.length < 1){
          return res.status(401).json({message:"Failed!! Username not registered",success:"0"});
        }
