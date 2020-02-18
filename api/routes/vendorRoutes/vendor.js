@@ -72,7 +72,6 @@ router.get('/locations/:idVendor',jwtAuth,ControllerVendor.get_detail_locations_
  */
  router.post('/',ControllerVendor.register_vendor);
  router.post('/data',uploadVendor.single("photo"),ControllerVendor.add_vendor_data);
- router.post('/region',ControllerVendor.add_vendor_region);
  router.post('/location',uploadToko.single("photoToko"),ControllerVendor.add_vendor_location);
 /**
  * Delete Vendor 
@@ -83,7 +82,6 @@ router.delete('/:id',jwtAuth,ControllerVendor.delete_vendor);
  */
 router.patch('/',jwtAuth,ControllerVendor.update_vendor);
 router.patch('/data',jwtAuth,uploadVendor.single("photo"),ControllerVendor.vendor_data_update);
-router.patch('/region',jwtAuth,ControllerVendor.update_vendor_region);
 router.patch('/location',jwtAuth,uploadToko.single("photoToko"),ControllerVendor.update_location);
 
 module.exports = router;

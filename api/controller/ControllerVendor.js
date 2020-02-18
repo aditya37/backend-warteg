@@ -7,7 +7,6 @@ const randToken= require('rand-token');
 const Vendor       =  require('../model/vendor/modelvendor');
 const VendorData   =  require('../model/vendor/modelVendorData');
 const VendorLocation= require('../model/vendor/modelVendorLocation');
-const VendorRegion =  require('../model/vendor/modelVendorRegion');
 const VendorLog    =  require('../model/vendor/modelVendorLog');
 
 
@@ -23,14 +22,6 @@ exports.get_vendors  =(req,res,next)=>{
         },{ $unwind:"$vendor_datas"},
         {
             $lookup:{
-                from:"vendorregions",
-                localField:"_id",
-                foreignField:"vendor",
-                as:"vendor_regions"
-            }
-        },{$unwind:"$vendor_regions"},
-        {
-            $lookup:{
                 from:"vendorlocations",
                 localField:"_id",
                 foreignField:"vendor",
@@ -42,8 +33,6 @@ exports.get_vendors  =(req,res,next)=>{
                 "vendor_locations.vendor":0,
                 "vendor_locations._id":0,
                 "vendor_locations.hours._id":0,
-                "vendor_regions._id":0,
-                "vendor_regions.vendor":0,
                 "vendor_datas._id":0,
                 "vendor_datas.vendor":0,"password":0
             }
@@ -74,14 +63,6 @@ exports.get_vendorid =(req,res,next)=>{
         },{ $unwind:"$vendor_datas"},
         {
             $lookup:{
-                from:"vendorregions",
-                localField:"_id",
-                foreignField:"vendor",
-                as:"vendor_regions"
-            }
-        },{$unwind:"$vendor_regions"},
-        {
-            $lookup:{
                 from:"vendorlocations",
                 localField:"_id",
                 foreignField:"vendor",
@@ -96,8 +77,6 @@ exports.get_vendorid =(req,res,next)=>{
                 "vendor_locations.vendor":0,
                 "vendor_locations._id":0,
                 "vendor_locations.hours._id":0,
-                "vendor_regions._id":0,
-                "vendor_regions.vendor":0,
                 "vendor_datas._id":0,
                 "vendor_datas.vendor":0,"password":0
             }
@@ -189,40 +168,6 @@ exports.add_vendor_data=(req,res,next)=>{
     .catch(error =>{
         console.log(error);
     });
-};
-exports.add_vendor_region=(req,res,next)=>{
-    VendorRegion.find({vendor:req.body.idVendor})
-    .then(result =>{
-        if(result.length >= 1){
-            return res.status(409).json({message:"Region Data Has Been Filled",success:"0"})
-        }else{
-            
-            const vendorRegiondata = new VendorRegion({
-                _id:new mongoose.Types.ObjectId(),
-                administrative_area_level_1: req.body.provinsi,
-                administrative_area_level_2: req.body.kota,
-                administrative_area_level_3: req.body.kecamatan,
-                administrative_area_level_4: req.body.desa,
-                vendor: req.body.idVendor
-            });
-
-            vendorRegiondata.save()
-            .then(result =>{
-                if(result){
-                    res.status(201).json({message:"Successfully Add Vendor Region",success:"1",result:result});
-                }else{
-                    res.status(404).json({message:"Failed Insert Vendor Region",succes:"0"});
-                }
-            })
-            .catch(error=>{
-                console.log(error);
-                res.status(500).json({message:"Upss!! sorry",success:"0",msg:error});
-            })
-        }
-    })
-    .catch(error =>{
-        console.log(error);
-    })
 };
 exports.add_vendor_location=(req,res,next)=>{
     //console.log(req.body);
@@ -482,25 +427,6 @@ exports.vendor_data_update=(req,res,next)=>{
     })
     .catch(errorUpdate =>{
         res.status(500).json({message:"Failed Update Vendor Data",success:"0",msg:errorUpdate})
-    })
-};
-exports.update_vendor_region=(req,res,next)=>{
-    VendorRegion.updateOne(
-        {
-            vendor:req.body.idVendor
-        },{
-            $set:{
-                administrative_area_level_1: req.body.provinsi,
-                administrative_area_level_2: req.body.kota,
-                administrative_area_level_3: req.body.kecamatan,
-                administrative_area_level_4: req.body.desa,
-            }
-        })
-    .then(result =>{
-        res.status(200).json({message:"Success Update Vendors Region",success:"1",result:true})
-    })
-    .catch(errorUpdate =>{
-        res.status(500).json({message:"Failed Update Vendor Region",success:"0",msg:errorUpdate})
     })
 };
 exports.update_location =(req,res,next)=>{
