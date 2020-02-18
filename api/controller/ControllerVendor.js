@@ -240,6 +240,7 @@ exports.add_vendor_location=(req,res,next)=>{
                 postalCode:req.body.kodepos,
                 lat:req.body.lat,
                 lng:req.body.lng,
+                metaLocation:req.body.region,
                 vendor :req.body.idVendor
              });
              
@@ -514,7 +515,8 @@ exports.update_location =(req,res,next)=>{
                 address:req.body.alamat,
                 postalCode:req.body.kodepos,
                 lat:req.body.lat,
-                lng:req.body.lng
+                lng:req.body.lng,
+                metaLocation:req.body.region
             }
         })
     .then(result=>{

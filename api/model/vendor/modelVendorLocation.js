@@ -13,6 +13,12 @@ const schemaVendorLocation = moongose.Schema({
     }],
     lat: {type:String,required:true},
     lng: {type:String,required:true},
+    metaLocation:[{
+        provinsi: {type:String,required:true},
+        kota:     {type:String,required:true},
+        kecamatan:{type:String,required:true},
+        desa:     {type:String,required:true}
+    }],
     vendor:{
         type:moongose.Schema.Types.ObjectId,
         ref:"vendor"
