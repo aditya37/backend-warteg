@@ -7,6 +7,6 @@ module.exports = (req,res,next)=>{
         req.userData = decoded;
         next();
     }catch(error){
-        return res.status(401).json({message:"Ohno!!! Empat Kosong Satu",success:"0",msg:error})
+        return res.status(401).json({message:"Sorry, Not Authorized",success:"0",msg:error})
     }
 };

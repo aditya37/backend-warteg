@@ -239,7 +239,7 @@ exports.vendor_login =(req,res,next)=>{
   
        bcrypt.compare(req.body.password,vendor[0].password,(err,result)=>{
          if(err){
-           return res.status(401).json({success:"0",message:"Auth Failed"});
+           return res.status(401).json({message:"Auth Failed",success:"0"});
          }
   
          if(result){
@@ -265,7 +265,8 @@ exports.vendor_login =(req,res,next)=>{
        })
      })
     .catch(error =>{
-         res.status(500).json({message:"Opss!!","success":"0",msg:error});
+        console.log(error);
+        res.status(500).json({message:"Opss!!",success:"0"});
      })
 };
 exports.vendor_log   =(req,res,next)=>{
@@ -293,7 +294,7 @@ exports.get_vendor_log=(req,res,next)=>{
     })
     .catch(error =>{
         console.log(error);
-        res.status(500).json({message:"Failed Load Log Data",success:"0",msg: error});
+        res.status(500).json({message:"Failed Load Log Data",success:"0"});
     });
 };
 // PR 
@@ -365,8 +366,7 @@ exports.get_detail_locations_byId =(req,res,next)=>{
             return res.status(404).json({message:"Oooopss!!!, Data Empty",success:"0"});
         }else{
             if(result[0].vendor_products <= 1){
-                console.log(result);
-                return res.status(404).json({message:"Empty Data, please fill your product",success:"0"});
+                return res.status(404).json({message:"Data Empty, please fill your product",success:"0"});
             }else{
                 res.status(200).json({message:"Success Load Detail Locations",success:"1",result:result});
             }
@@ -475,7 +475,7 @@ exports.refresh_auth=(req,res,next)=>{
                     username:vendor[0].username,
                     email:vendor[0].email
                  };
-                 res.status(200).json({message:"Login Sucessfully",success:"1",result:data,token:token,refresh_token:vendor[0].refresh_token});
+                 res.status(200).json({message:"Login Sucessfully",success:"1",token:token,refresh_token:vendor[0].refresh_token,result:data});
             }
         })
         .catch(error=>{
