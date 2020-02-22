@@ -40,14 +40,14 @@ exports.get_vendors  =(req,res,next)=>{
     ])
     .then(result =>{
         if(result){
-            res.status(200).json({message:"Successfully Load Data Vendors",success:"1",count: result.length,vendor_datas:result})
+            res.status(200).json({message:"Successfully Load Data Vendors",success:"1",count: result.length,result:result})
         }else{
-            res.status(404).json({message:"Customer Datas Not Found",success:"0",result:[]});
+            res.status(404).json({message:"Customer Datas Not Found",success:"0"});
         }
     })
     .catch(error =>{
         console.log(error);
-        res.status(500).json({message:"Upsss! Sorry",success:"0",msg:error});
+        res.status(500).json({message:"Upsss! Sorry",success:"0"});
     })
 };
 exports.get_vendorid =(req,res,next)=>{
@@ -91,7 +91,7 @@ exports.get_vendorid =(req,res,next)=>{
     })
     .catch(error =>{
         console.log(error);
-        res.status(500).json({message:"Upsss! Sorry",success:"0",msg:error});
+        res.status(500).json({message:"Upsss! Sorry",success:"0"});
     })
 };
 exports.register_vendor =(req,res,next)=>{
@@ -121,11 +121,11 @@ exports.register_vendor =(req,res,next)=>{
                    vendorRegister.save()
                    .then(result =>{
                        console.log(result);
-                       res.status(201).json({message:"Successfuly Registered Vendor",success:"1",result:result});
+                       res.status(201).json({message:"Successfuly Registered Vendor",success:"1",idVendor:result._id});
                    })
                    .catch(error =>{
                        console.log(error);
-                       res.status(500).json({message:"Failed Register Vendor",success:"0",msg:error});
+                       res.status(500).json({message:"Failed Register Vendor",success:"0"});
                    });
                }
             })         
@@ -154,19 +154,20 @@ exports.add_vendor_data=(req,res,next)=>{
             vendorData.save()
             .then(result =>{
                 if(result){
-                    res.status(201).json({message:"Successfully Add Vendor Data",success:"1",result:result});
+                    res.status(201).json({message:"Successfully Add Vendor Data",success:"1"});
                 }else{
-                    res.status(404).json({message:"Failed Add Vendor Data",success:"0",vendorData:result});
+                    res.status(404).json({message:"Failed Add Vendor Data",success:"0"});
                 }
             })
             .catch(error =>{
                 console.log(error);
-                res.status(500).json({msg:error});
+                res.status(500).json({message:"Failed Add Vendor Data",success:"0"});
             })
         }
     })
     .catch(error =>{
         console.log(error);
+        res.status(500).json({message:"Failed Add Vendor Data",success:"0"});
     });
 };
 exports.add_vendor_location=(req,res,next)=>{
@@ -192,20 +193,20 @@ exports.add_vendor_location=(req,res,next)=>{
              vendorlocation.save()
              .then(result =>{
                  if(result){
-                    res.status(201).json({message:"Successfully Add Vendor Location",success:"1",result:result});
+                    res.status(201).json({message:"Successfully Add Vendor Location",success:"1"});
                  }else{
                     res.status(404).json({message:"Failed Insert Vendor Location",succes:"0"});
                  }
              })
              .catch(error =>{
                  console.log(error);
-                 res.status(500).json({message:"Upss!! sorry",success:"0",msg:error});
+                 res.status(500).json({message:"Upss!! sorry",success:"0"});
              })
          }
      })
      .catch(erorr =>{
          console.log(erorr);
-         res.status(500).json({msg:erorr})
+         res.status(500).json({message:"Upss!! sorry",success:"0"});
      });
 };
 exports.delete_vendor =(req,res,next)=>{
@@ -278,11 +279,11 @@ exports.vendor_log   =(req,res,next)=>{
   
     vendorlog.save()
     .then(result =>{
-        res.status(201).json({message:"Successfully Save Authentication Vendor Log",success:"1",result:result});
+        res.status(201).json({message:"Successfully Save Authentication Vendor Log",success:"1"});
     })
     .catch(error=>{
       console.log(error)
-      res.status(500).json({message:"Failed Save Authentication Vendor Log",success:"0",msg: error });
+      res.status(500).json({message:"Failed Save Authentication Vendor Log",success:"0"});
     })
 };
 exports.get_vendor_log=(req,res,next)=>{
@@ -322,7 +323,8 @@ exports.get_allVendor_locations =(req,res,next)=>{
         res.status(200).json({message:"Success Load Vendor Locations",success:"1",count:result.length,result:result})
     })
     .catch(error =>{
-        res.status(500).json({message:"Failed Load Location",success:"0",msg:error});
+        console.log(error);
+        res.status(500).json({message:"Failed Load Location",success:"0"});
     })
 };
 // *PR* menambahkan product yang dijual di lokasi tersebut
@@ -372,7 +374,7 @@ exports.get_detail_locations_byId =(req,res,next)=>{
     })
     .catch(error =>{
         console.log(error);
-        res.status(500).json({message:"Failed Load Data",success:"0",msg:error});
+        res.status(500).json({message:"Failed Load Data",success:"0"});
     });
 };
 exports.update_vendor=(req,res,next)=>{
@@ -426,7 +428,7 @@ exports.vendor_data_update=(req,res,next)=>{
         res.status(200).json({message:"Success Update Vendors Data",success:"1"})
     })
     .catch(errorUpdate =>{
-        res.status(500).json({message:"Failed Update Vendor Data",success:"0",msg:errorUpdate})
+        res.status(500).json({message:"Failed Update Vendor Data",success:"0"})
     })
 };
 exports.update_location =(req,res,next)=>{
@@ -446,15 +448,15 @@ exports.update_location =(req,res,next)=>{
             }
         })
     .then(result=>{
-        res.status(200).json({message:"Success Update Vendors Location",success:"1",result:true})
+        res.status(200).json({message:"Success Update Vendors Location",success:"1"})
     })
     .catch(errorUpdate=>{
-        res.status(500).json({message:"Failed Update Vendor Region",success:"0",msg:errorUpdate})
+        res.status(500).json({message:"Failed Update Vendor Region",success:"0"})
     })
 };
 exports.refresh_auth=(req,res,next)=>{
     if(Object.keys(req.body).length == 0){
-        return res.status(409).json({message:"Ooop!! Please fill the filed",success:"1"});
+        return res.status(409).json({message:"Ooop!! Please fill the filed",success:"0"});
     }else{
         Vendor.find({refresh_token:req.body.refresh_token})
         .then(vendor=>{
@@ -478,7 +480,7 @@ exports.refresh_auth=(req,res,next)=>{
         })
         .catch(error=>{
             console.log(error);
-            res.status(500).json({message:"Failed Get Refresh Token",success:"0",msg:error})
+            res.status(500).json({message:"Failed Get Refresh Token",success:"0"})
         })
     }
 };
