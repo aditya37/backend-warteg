@@ -34,7 +34,8 @@ exports.getAll_product   =(req,res,next)=>{
         }
     })
     .catch(error =>{
-        res.status(500).json({message:"Upsss! Sorry",success:"0",msg:error});
+        console.log(error);
+        res.status(500).json({message:"Upsss! Sorry",success:"0"});
     });
 };
 exports.get_detailProduct=(req,res,next)=>{
@@ -48,6 +49,7 @@ exports.get_detailProduct=(req,res,next)=>{
         }
     })
     .catch(error =>{
+        console.log(error);
         res.status(500).json({message:"Failed Load Products Detail",success:"0",msg:error});
     })
 };
@@ -55,8 +57,7 @@ exports.update_product   =(req,res,next)=>{
     vendorProduct.find({idProduct:req.body.idProduct})
     .then(result =>{
         if(result.length < 1){
-            
-            return res.status(404).json({message:"Products not exists",success:"0",result:result})
+            return res.status(404).json({message:"Products not exists",success:"0"})
         }else{
             vendorProduct.updateOne({
                 idProduct:req.body.idProduct
@@ -99,9 +100,9 @@ exports.add_product      =(req,res,next)=>{
         addProduct.save()
         .then(resultAdd =>{
             if(resultAdd){
-                res.status(201).json({message:"Successfully Add Product",success:"1",result:resultAdd});
+                res.status(201).json({message:"Successfully Add Product",success:"1"});
             }else{
-                res.status(404).json({message:"Failed Add Product",succes:"0"});
+                res.status(404).json({message:"Failed Add Product",success:"0"});
             }
         })
         .catch(errAdd =>{
