@@ -96,6 +96,10 @@ app.use((error,req,res,next) => {
 });
 
 server.listen(port,()=>{
-  console.log("Server Run On Port "+ port);
+  console.log("===========================\n"+
+  "Server Run On\n"+
+  "Port:"+port+"\n"+
+  "Timestamp: "+new Date().getTime()+
+  "\n===========================");
 });
 module.exports = app;
